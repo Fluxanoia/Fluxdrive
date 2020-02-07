@@ -4,6 +4,10 @@
 
 An SDL wrapper in C++ for fast application development.
 
+## Download
+
+The compiled libraries can be found in the Libraries directory.
+
 ## Documentation
 
 The documentation is available here:
