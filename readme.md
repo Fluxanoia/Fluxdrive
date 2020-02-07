@@ -2,7 +2,13 @@
 
 ## Description
 
-A C++ SDL interface written to allow projects to be built quickly.
+An SDL wrapper in C++ for fast application development.
+
+## Documentation
+
+The documentation is available here:
+
+https://fluxanoia.github.io/html/index.html
 
 ## Libraries
 
