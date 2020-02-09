@@ -183,11 +183,42 @@ void FD_TextImage::changeText(SDL_Renderer* renderer, std::string text) {
 
 // Pure Image Member Functions
 
-FD_PureImage::FD_PureImage(SDL_Texture* texture) : FD_Image(IT_PURE) {
-	this->texture = texture;
-	query();
+FD_PureImage::FD_PureImage(SDL_Renderer* renderer, 
+	Uint32 width, Uint32 height, std::vector<FD_PureElement> elements)
+	: FD_Image(IT_PURE), FD_Resizable() {
+	this->renderer = renderer;
+	this->pure_width = width;
+	this->pure_height = height;
+	this->elements = elements;
+	this->redraw();
+	this->query();
 }
 FD_PureImage::~FD_PureImage() { }
+
+void FD_PureImage::redraw() {
+	if (texture != nullptr) SDL_DestroyTexture(texture);
+	texture = SDL_CreateTexture(renderer,
+		SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+		this->pure_width, this->pure_height);
+	SDL_SetRenderTarget(renderer, texture);
+	std::shared_ptr<FD_Image> image;
+	for (FD_PureElement e : elements) {
+		FD_Handling::lock(e.image, image, true);
+		SDL_SetTextureBlendMode(image->getTexture(), e.blend_mode);
+		SDL_SetTextureAlphaMod(image->getTexture(), e.opacity);
+		SDL_RenderCopyEx(renderer,
+			image->getTexture(),
+			e.srcrect, e.dstrect,
+			e.angle, e.center, e.flags);
+		SDL_SetTextureAlphaMod(image->getTexture(), 255);
+		SDL_SetTextureBlendMode(image->getTexture(), SDL_BLENDMODE_NONE);
+	}
+	SDL_SetRenderTarget(renderer, nullptr);
+}
+
+void FD_PureImage::resized(int width, int height) {
+	redraw();
+}
 
 // Image Manager Member Functions
 

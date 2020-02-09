@@ -86,40 +86,37 @@ FD_BasicButton::FD_BasicButton(const FD_ButtonTemplate& temp,
 		if (overlay_height) height += temp.stretch_buffer_h;
 	}
 	if (width == 0 || height == 0) FD_Handling::error("Button constructed with no area.");
-	// Create the texture
-	SDL_Texture* texture = SDL_CreateTexture(scene->getWindow()->getRenderer(),
-		SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-	// Set the texture as the target
-	SDL_SetRenderTarget(scene->getWindow()->getRenderer(), texture);
-	SDL_Rect dstrect = { 0, 0, 0, 0 };
-	// Draw the button background
+	// Create elements
+	std::vector<FD_PureElement> elements{};
+	FD_PureElement pe_back{}, pe_fore{};
+	// Add the background element
 	if (has_background) {
-		if (temp.stretch_bg) {
-			SDL_RenderCopy(scene->getWindow()->getRenderer(),
-				background->getTexture(), nullptr, nullptr);
-		} else {
-			dstrect.x = (width - background->getWidth()) / 2;
-			dstrect.y = (height - background->getHeight()) / 2;
-			dstrect.w = background->getWidth();
-			dstrect.h = background->getHeight();
-			SDL_RenderCopy(scene->getWindow()->getRenderer(),
-				background->getTexture(), nullptr, &dstrect);
+		pe_back.image = background;
+		if (!temp.stretch_bg) {
+			back_dstrect = new SDL_Rect();
+			back_dstrect->x = (width - background->getWidth()) / 2;
+			back_dstrect->y = (height - background->getHeight()) / 2;
+			back_dstrect->w = background->getWidth();
+			back_dstrect->h = background->getHeight();
+			pe_back.dstrect = back_dstrect;
 		}
+		elements.push_back(pe_back);
 	}
-	// Draw the overlay
+	// Add the overlay
 	if (has_overlay) {
-		dstrect.x = (width - overlay->getWidth()) / 2;
-		dstrect.y = (height - overlay->getHeight()) / 2;
-		dstrect.w = overlay->getWidth();
-		dstrect.h = overlay->getHeight();
-		SDL_RenderCopy(scene->getWindow()->getRenderer(),
-			overlay->getTexture(), nullptr, &dstrect);
+		pe_fore.image = overlay;
+		fore_dstrect = new SDL_Rect();
+		fore_dstrect->x = (width - overlay->getWidth()) / 2;
+		fore_dstrect->y = (height - overlay->getHeight()) / 2;
+		fore_dstrect->w = overlay->getWidth();
+		fore_dstrect->h = overlay->getHeight();
+		pe_fore.dstrect = fore_dstrect;
+		elements.push_back(pe_fore);
 	}
-	// Reset the render target
-	SDL_SetRenderTarget(scene->getWindow()->getRenderer(), nullptr);
-	// Assign image
-	this->pure_image = std::make_shared<FD_PureImage>(texture);
+	// Create the pure image.
+	this->pure_image = std::make_shared<FD_PureImage>(
+		scene->getWindow()->getRenderer(), width, height, elements);
+	scene->getWindow()->addResizable(pure_image);
 	this->image = pure_image;
 	// Set values
 	this->x->set(static_cast<double>(temp.origin_x) + x);
@@ -138,7 +135,10 @@ FD_BasicButton::FD_BasicButton(const FD_ButtonTemplate& temp,
 	sfx_press = temp.sfx_press;
 	sfx_release = temp.sfx_release;
 }
-FD_BasicButton::~FD_BasicButton() {}
+FD_BasicButton::~FD_BasicButton() {
+	if (back_dstrect != nullptr) delete back_dstrect;
+	if (fore_dstrect != nullptr) delete fore_dstrect;
+}
 
 bool FD_BasicButton::release() {
 	if (held) {
@@ -246,23 +246,19 @@ FD_DropdownButton::FD_DropdownButton(const FD_ButtonTemplate& temp,
 	if (width == 0 || height == 0) FD_Handling::error("Button constructed with no area.", true);
 	// Create the background
 	if (has_background) {
-		SDL_Renderer* ren = scene->getWindow()->getRenderer();
-		SDL_Texture* texture;
-		if (temp.stretch_bg) {
-			texture = SDL_CreateTexture(ren,
-				SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
-				width, height);
-		} else {
-			texture = SDL_CreateTexture(ren,
-				SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
-				background->getWidth(), background->getHeight());
+		std::vector<FD_PureElement> elems{};
+		FD_PureElement pe_elem{};
+		Uint32 pe_width{ width }, pe_height{ height };
+		pe_elem.image = background;
+		if (!temp.stretch_bg) {
+			pe_width = background->getWidth(); 
+			pe_height = background->getHeight();
 		}
-		SDL_SetRenderTarget(ren, texture);
-		SDL_RenderCopy(ren,
-			background->getTexture(),
-			nullptr, nullptr);
-		SDL_SetRenderTarget(ren, nullptr);
-		bg_cpy = std::make_shared<FD_PureImage>(texture);
+		elems.push_back(pe_elem);
+		bg_cpy = std::make_shared<FD_PureImage>(
+			scene->getWindow()->getRenderer(), pe_width, pe_height, 
+			elems);
+		scene->getWindow()->addResizable(bg_cpy);
 		bg = std::make_shared<FD_Element>(bg_cpy,
 			temp.origin_x + x,
 			temp.origin_y + y,

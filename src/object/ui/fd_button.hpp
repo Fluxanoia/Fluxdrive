@@ -220,6 +220,9 @@ private:
 
 	std::shared_ptr<FD_PureImage> pure_image;
 
+	SDL_Rect* back_dstrect{ nullptr };
+	SDL_Rect* fore_dstrect{ nullptr };
+
 public:
 
 	//! Constructs a FD_BasicButton.

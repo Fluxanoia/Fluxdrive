@@ -59,7 +59,7 @@ void FD_Camera::update(bool force) {
 		bounds->x = static_cast<int>(x->value() - bounds->w / 2);
 		bounds->y = static_cast<int>(y->value() - bounds->h / 2);
 	}
-	shake_decrement(shake_amount);
+	shake_amount = shake_decrement(shake_amount);
 	if (shake_amount < 0.01) shake_amount = 0;
 }
 void FD_Camera::resized(int width, int height) {

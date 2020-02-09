@@ -10,6 +10,7 @@
 
 #include "fd_paths.hpp"
 #include "fd_registry.hpp"
+#include "../display/fd_resizable.hpp"
 
 /*!
 	@file
@@ -310,17 +311,65 @@ public:
 
 };
 
+//! This allows the FD_PureImage to re-draw itself by storing the components seperately.
+typedef struct FD_PureElement_ {
+	//! The image used by the element.
+	std::weak_ptr<FD_Image> image;
+	//! The opacity of the image.
+	Uint8 opacity{ 255 };
+	//! The source rectangle of the element.
+	SDL_Rect* srcrect{ nullptr };
+	//! The destination rectangle of the element.
+	SDL_Rect* dstrect{ nullptr };
+	//! The angle of the element.
+	double angle{ 0 };
+	//! The center of the element, relative to the top left.
+	SDL_Point* center{ nullptr };
+	//! The flipping flags of the element.
+	SDL_RendererFlip flags;
+	//! The blend mode.
+	SDL_BlendMode blend_mode{ SDL_BLENDMODE_BLEND };
+} FD_PureElement;
+
 //! The FD_PureImage class, specialises the image for custom renderered texture.
-class FD_PureImage : public FD_Image {
+/*!
+	If the texture given to this class has the SDL_TEXTUREACCESS_RENDER flag,
+	add this class to the appropriate FD_Window's resizable list.
+*/
+class FD_PureImage : public FD_Image, public FD_Resizable {
+private:
+
+	SDL_Renderer* renderer;
+	Uint32 pure_width, pure_height;
+	std::vector<FD_PureElement> elements;
+
+	void redraw();
+
 public:
 
 	//! Constructs a FD_PureImage.
 	/*!
-		\param texture The texture for the image.
+		You should add this image to the resizable list unless you aren't
+		planning on resizing the window.
+
+		\param renderer The renderer to use to construct the texture.
+		\param width    The width of the made texture.
+		\param height   The height of the made texture.
+		\param elements The elements to render.
+
+		\sa FD_PureElement
 	*/
-	FD_PureImage(SDL_Texture* texture);
+	FD_PureImage(SDL_Renderer* renderer, Uint32 width, Uint32 height, 
+		std::vector<FD_PureElement> elements);
 	//! Destroys the FD_PureImage.
 	~FD_PureImage();
+
+	//! When the window is resized, the video device is lost - this circumvents that issue.
+	/*!
+		\param width  The new width of the window.
+		\param height The new height of the window.
+	*/
+	void resized(int width, int height);
 
 };
 

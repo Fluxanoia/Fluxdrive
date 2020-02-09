@@ -1,5 +1,6 @@
 #include "fd_testing.hpp"
 
+// Runs the test suite
 void FD_Testing::test() {
 	std::shared_ptr<FD_Window> window{ std::make_shared<FD_Window>("Fluxdrive Test", 640, 360) };
 	std::shared_ptr<FD_Scene> scene{ std::make_shared<FD_Scene>(window, "test/config/display.fdc") };
@@ -13,15 +14,104 @@ void FD_Testing::test() {
 	scene->getImageManager()->setRegistry(registry);
 
 	std::shared_ptr<FD_StateManager> state_manager{ std::make_shared<FD_StateManager>(scene) };
+	std::shared_ptr<FD_TestChoiceState> choice_test{ std::make_shared<FD_TestChoiceState>(scene) };
 	std::shared_ptr<FD_CameraTestState> camera_test{ std::make_shared<FD_CameraTestState>(scene) };
+	state_manager->logState(choice_test);
 	state_manager->logState(camera_test);
-	state_manager->setState(FD_TEST_CAMERA_STATE);
+	state_manager->setState(FD_TEST_CHOICE_STATE);
 
 	std::shared_ptr<FD_Looper> looper{ std::make_shared<FD_Looper>(state_manager, 60) };
 	looper->loop();
 }
 
-// Test State Member Functions
+// Test Choice State Member Functions
+
+FD_Testing::FD_TestChoiceState::FD_TestChoiceState(std::weak_ptr<FD_Scene> s)
+	: FD_State(FD_TEST_CAMERA_STATE, s) {
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(s, scene, true);
+	// Create the group and camera set
+	cameras = std::make_shared<FD_CameraSet>(scene->getWindow());
+	camera = cameras->addCamera(1920);
+	group = std::make_shared<FD_ObjectGroup>(object_list);
+	group->setCameraSet(cameras);
+	scene->addObjectGroup(group);
+	// Create the button manager
+	button_manager = new FD_ButtonManager(scene, cameras, input_list);
+	button_manager->addDefaultMaps();
+	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
+	// Add background
+	std::shared_ptr<FD_FileImage> bg_image;
+	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND),
+		bg_image, true);
+	background = std::make_shared<FD_Element>(bg_image,
+		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
+	background->assimilate(group);
+	// Add music
+	FD_Handling::lock(scene->getAudioManager()->loadMusic(FD_SONG),
+		music, true);
+	music->playMusic();
+	// Create the buttons
+	int increment{ 0 };
+	std::shared_ptr<FD_Font> def_font;
+	SDL_Colour colour = { 255, 255, 255, 255 };
+	FD_ButtonTemplate temp{ s, group, 10, true };
+	temp.background = im->loadImage(FD_IMAGE_BUTTON);
+	FD_Handling::lock(im->loadFont(FD_FONT, 32), def_font, true);
+	for (auto s : button_titles) {
+		button_manager->addBasicButton(temp, 0, 90 * increment,
+			increment, s, def_font, colour);
+		increment++;
+	}
+	// Get the input
+	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
+		input, true);
+}
+FD_Testing::FD_TestChoiceState::~FD_TestChoiceState() { delete button_manager; }
+
+void FD_Testing::FD_TestChoiceState::wake() {
+	FD_State::wake();
+}
+
+void FD_Testing::FD_TestChoiceState::sleep() {
+	button_manager->reset();
+}
+
+void FD_Testing::FD_TestChoiceState::update() {
+	int code;
+	while (button_manager->getEvent(code)) {
+		switch (code) {
+		case CAMERA_TEST:
+			nextState = FD_TEST_CAMERA_STATE;
+			break;
+		case QUIT:
+			closed = true;
+			break;
+		default:
+			std::string debug{ "Unhandled code: " };
+			debug += std::to_string(code);
+			FD_Handling::debug(debug.c_str());
+			break;
+		}
+	}
+	background->update();
+	button_manager->update();
+}
+
+void FD_Testing::FD_TestChoiceState::resized(int w, int h) {
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(this->scene, scene, true);
+	if (background->getWidth() > background->getHeight()) {
+		background->setHeight(h);
+		background->getTweenScaleX()->set(background->getHeightScale());
+	} else {
+		background->setWidth(w);
+		background->getTweenScaleY()->set(background->getWidthScale());
+	}
+}
+
+
+// Camera Test State Member Functions
 
 FD_Testing::FD_CameraTestState::FD_CameraTestState(std::weak_ptr<FD_Scene> s) 
 	: FD_State(FD_TEST_CAMERA_STATE, s) {
@@ -71,9 +161,19 @@ FD_Testing::FD_CameraTestState::FD_CameraTestState(std::weak_ptr<FD_Scene> s)
 		SWITCH_CAMERAS_SMOOTH, SWITCH_CAMERAS_PRESERVED };
 	std::vector<std::string> texts{ "Instant", "Smooth", "Smooth (preserved)" };
 	button_manager->addDropdownButton(temp, 0, -90, codes, texts, def_font, colour);
+	codes.clear();
+	texts.clear();
+	int index{ 0 };
+	for (SDL_Point p : resolutions) {
+		codes.push_back(RESIZE_WINDOW + index);
+		texts.push_back(std::to_string(p.x) + "x" + std::to_string(p.y));
+		index++;
+	}
+	button_manager->addDropdownButton(temp, 0, -180, codes, texts, def_font, colour);
 	// Get the input
 	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
 		input, true);
+	input->addKeyMap(FD_MAP_RELEASED, SDLK_ESCAPE, BACK);
 	input->addKeyMap(FD_MAP_HELD, SDLK_w, CAMERA_UP);
 	input->addKeyMap(FD_MAP_HELD, SDLK_s, CAMERA_DOWN);
 	input->addKeyMap(FD_MAP_HELD, SDLK_a, CAMERA_LEFT);
@@ -91,6 +191,8 @@ void FD_Testing::FD_CameraTestState::sleep() {
 
 void FD_Testing::FD_CameraTestState::update() {
 	int code;
+	std::shared_ptr<FD_Camera> cam;
+	FD_Handling::lock(cameras->getCurrentCamera(), cam, true);
 	while (button_manager->getEvent(code)) {
 		switch (code) {
 		case SWITCH_CAMERAS:
@@ -100,8 +202,8 @@ void FD_Testing::FD_CameraTestState::update() {
 				cameras->transitionCamera(camera_1);
 			}
 			break;
-		case QUIT:
-			closed = true;
+		case SHAKE_CAMERA:
+			cam->shake(2);
 			break;
 		case SWITCH_CAMERAS_INSTANT:
 			cameras->setCameraTransition(FD_CAMERA_TRAN_INSTANT);
@@ -113,6 +215,15 @@ void FD_Testing::FD_CameraTestState::update() {
 			cameras->setCameraTransition(FD_CAMERA_TRAN_SMOOTH_PRESERVED);
 			break;
 		default:
+			int res = code - RESIZE_WINDOW;
+			if (res >= 0 && static_cast<Uint32>(res) < resolutions.size()) {
+				int res_x{ resolutions.at(res).x };
+				int res_y{ resolutions.at(res).y };
+				std::shared_ptr<FD_Scene> s;
+				FD_Handling::lock(scene, s);
+				s->getWindow()->setResolution(res_x, res_y);
+				break;
+			}
 			std::string debug{ "Unhandled code: " };
 			debug += std::to_string(code);
 			FD_Handling::debug(debug.c_str());
@@ -120,30 +231,24 @@ void FD_Testing::FD_CameraTestState::update() {
 		}
 	}
 	FD_InputEvent e;
-	std::shared_ptr<FD_Camera> cam;
 	while (input->getEvent(e)) {
 		switch (e.code) {
+		case BACK:
+			nextState = FD_TEST_CHOICE_STATE;
+			break;
 		case CAMERA_UP:
-			FD_Handling::lock(cameras->getCurrentCamera(),
-				cam, true);
 			cam->getTweenY()->move(FD_TWEEN_EASE_OUT,
 				cam->getTweenY()->value() - camera_speed, 200);
 			break;
 		case CAMERA_DOWN:
-			FD_Handling::lock(cameras->getCurrentCamera(),
-				cam, true);
 			cam->getTweenY()->move(FD_TWEEN_EASE_OUT,
 				cam->getTweenY()->value() + camera_speed, 200);
 			break;
 		case CAMERA_LEFT:
-			FD_Handling::lock(cameras->getCurrentCamera(),
-				cam, true);
 			cam->getTweenX()->move(FD_TWEEN_EASE_OUT,
 				cam->getTweenX()->value() - camera_speed, 200);
 			break;
 		case CAMERA_RIGHT:
-			FD_Handling::lock(cameras->getCurrentCamera(),
-				cam, true);
 			cam->getTweenX()->move(FD_TWEEN_EASE_OUT,
 				cam->getTweenX()->value() + camera_speed, 200);
 			break;

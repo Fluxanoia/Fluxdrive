@@ -11,6 +11,7 @@
 namespace FD_Testing {
 
 	enum FD_TestStates {
+		FD_TEST_CHOICE_STATE,
 		FD_TEST_CAMERA_STATE
 	};
 
@@ -23,10 +24,45 @@ namespace FD_Testing {
 		FD_SONG
 	};
 
+	class FD_TestChoiceState : public FD_State {
+	private:
+
+		enum ButtonResponses {
+			CAMERA_TEST,
+			QUIT,
+		};
+		std::vector<std::string> button_titles{
+			"Camera Test",
+			"Quit"
+		};
+
+		FD_CameraIndex camera;
+		std::shared_ptr<FD_CameraSet> cameras;
+		std::shared_ptr<FD_ObjectGroup> group;
+		std::shared_ptr<FD_InputSet> input;
+
+		FD_ButtonManager* button_manager;
+		std::shared_ptr<FD_Element> background;
+		std::shared_ptr<FD_Music> music;
+
+	public:
+
+		FD_TestChoiceState(std::weak_ptr<FD_Scene> scene);
+		~FD_TestChoiceState();
+
+		void sleep() override;
+		void wake() override;
+		void update() override;
+
+		void resized(int w, int h) override;
+	};
+
 	class FD_CameraTestState : public FD_State {
 	private:
 
 		enum Inputs {
+			BACK,
+
 			CAMERA_UP,
 			CAMERA_DOWN,
 			CAMERA_LEFT,
@@ -35,15 +71,27 @@ namespace FD_Testing {
 
 		enum ButtonResponses {
 			SWITCH_CAMERAS,
-			QUIT,
+			SHAKE_CAMERA,
 
 			SWITCH_CAMERAS_INSTANT,
 			SWITCH_CAMERAS_SMOOTH,
-			SWITCH_CAMERAS_PRESERVED
+			SWITCH_CAMERAS_PRESERVED,
+
+			RESIZE_WINDOW
 		};
 		std::vector<std::string> button_titles{
 			"Switch Cameras",
-			"Quit"
+			"Shake Camera"
+		};
+
+		std::vector<SDL_Point> resolutions{
+			{ 640, 480 },
+			{ 800, 480 },
+			{ 1024, 768 },
+			{ 1280, 720 },
+			{ 1366, 768 },
+			{ 1440, 1080 },
+			{ 1920, 1080 }
 		};
 
 		const double camera_speed{ 25 };
