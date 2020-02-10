@@ -22,7 +22,9 @@
 
 bool FD_Main::initialise() {
 	// Hide the console
-#ifndef FD_DEBUG
+#ifdef FD_DEBUG
+	ShowWindow(GetConsoleWindow(), SW_SHOW);
+#else
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif
 	// Start initialisation
