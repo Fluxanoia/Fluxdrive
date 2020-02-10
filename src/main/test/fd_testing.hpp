@@ -24,7 +24,9 @@ namespace FD_Testing {
 
 		FD_FONT,
 
-		FD_SONG
+		FD_SONG,
+
+		FD_BLIP
 	};
 
 	class FD_TestChoiceState : public FD_State {
@@ -166,8 +168,20 @@ namespace FD_Testing {
 			BACK
 		};
 
-		enum ButtonResponses {};
-		std::vector<std::string> button_titles{};
+		enum ButtonResponses {
+			START_MUSIC,
+			STOP_MUSIC,
+			FADE_IN_MUSIC,
+			FADE_OUT_MUSIC,
+			PLAY_SFX
+		};
+		std::vector<std::string> button_titles{
+			"Start music",
+			"Stop music",
+			"Fade music in",
+			"Fade music out",
+			"Play SFX",
+		};
 
 		FD_CameraIndex camera;
 		std::shared_ptr<FD_CameraSet> cameras;
@@ -177,6 +191,7 @@ namespace FD_Testing {
 		FD_ButtonManager* button_manager;
 		std::shared_ptr<FD_Element> background;
 		std::shared_ptr<FD_Music> music;
+		std::shared_ptr<FD_SFX> sfx;
 
 	public:
 

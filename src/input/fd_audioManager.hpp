@@ -56,7 +56,7 @@ public:
 		\param fadeOut The length of the fade out of the previous music in ms.
 		\param fadeIn  The length of the fade in of the new music in ms.
 	*/
-	void playMusic(const int fadeOut = 0, const int fadeIn = 0);
+	void playMusic(const Uint32 fadeOut = 0, const Uint32 fadeIn = 0);
 
 	//! Checks whether this class' register is identical to the given one.
 	/*!
@@ -159,7 +159,10 @@ public:
 	void setSFXVolume(Sint8 volume);
 
 	//! Stops all music.
-	void haltMusic();
+	/*!
+		\param fadeOut How long the current music should fade out for.
+	*/
+	void haltMusic(const Uint32 fadeOut = 0);
 	//! Stops all sound effects.
 	void haltSFX();
 
@@ -177,7 +180,7 @@ public:
 
 		\return The loaded SFX.
 	*/
-	std::weak_ptr<FD_SFX> loadSoundEffect(const FD_SFXRegister reg, const Uint32 value);
+	std::weak_ptr<FD_SFX> loadSoundEffect(const FD_SFXRegister reg, const Uint32 value = 0);
 	//! Deletes a music track from the manager.
 	/*!
 		\param reg The register of the path to delete.
@@ -192,7 +195,7 @@ public:
 
 		\return Whether a chunk was deleted or not.
 	*/
-	bool deleteSoundEffect(const FD_SFXRegister reg, const Uint32 value);
+	bool deleteSoundEffect(const FD_SFXRegister reg, const Uint32 value = 0);
 
 };
 

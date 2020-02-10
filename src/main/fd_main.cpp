@@ -43,7 +43,7 @@ bool FD_Main::initialise() {
 	}
 	FD_Handling::debug("SDL_Mixer initialised...");
 	// Initialise PNG loading
-	int IMG_flags{ IMG_INIT_PNG };
+	int IMG_flags{ IMG_INIT_PNG || IMG_INIT_JPG };
 	if ((IMG_Init(IMG_flags) & IMG_flags) != IMG_flags) {
 		FD_Handling::errorIMG("SDL Image could not be initialised.");
 		return false;

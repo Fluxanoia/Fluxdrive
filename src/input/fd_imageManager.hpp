@@ -474,6 +474,8 @@ public:
 
 	//! Deletes an image from the manager.
 	/*!
+		\warning This should be a PNG or JPG.
+
 		\param reg The register of the image to delete.
 
 		\return Whether an image was deleted.

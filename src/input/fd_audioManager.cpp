@@ -24,8 +24,12 @@ void FD_AudioManager::update() {
 void FD_AudioManager::setMusicVolume(Sint8 volume) { Mix_VolumeMusic(volume); }
 void FD_AudioManager::setSFXVolume(Sint8 volume) { Mix_Volume(-1, volume); }
 
-void FD_AudioManager::haltMusic() { 
-	Mix_HaltMusic();
+void FD_AudioManager::haltMusic(const Uint32 fadeOut) { 
+	if (fadeOut > 0 && Mix_PlayingMusic()) {
+		Mix_FadeOutMusic(fadeOut);
+	} else {
+		Mix_HaltMusic();
+	}
 }
 void FD_AudioManager::haltSFX() {
 	Mix_HaltChannel(-1);
@@ -105,7 +109,7 @@ void FD_Music::playIfQueued() {
 	}
 }
 
-void FD_Music::playMusic(int fadeOut, int fadeIn) {
+void FD_Music::playMusic(Uint32 fadeOut, Uint32 fadeIn) {
 	if (Mix_PlayingMusic() && fadeOut > 0) {
 		Mix_FadeOutMusic(fadeOut);
 	} else if (fadeOut == 0) { 

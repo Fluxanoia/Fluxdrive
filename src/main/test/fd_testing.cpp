@@ -13,8 +13,9 @@ void FD_Testing::test() {
 	std::shared_ptr<FD_Registry> registry{ std::make_shared<FD_Registry>() };
 	registry->log(FD_IMAGE_BACKGROUND, "test/images/bg.png");
 	registry->log(FD_IMAGE_BUTTON, "test/images/button.png");
-	registry->log(FD_FONT, "test/font/cmunvt.ttf");
+	registry->log(FD_FONT, "test/font/font.ttf");
 	registry->log(FD_SONG, "test/audio/song.ogg");
+	registry->log(FD_BLIP, "test/audio/sfx.wav");
 	scene->getAudioManager()->setRegistry(registry);
 	scene->getImageManager()->setRegistry(registry);
 
@@ -430,8 +431,8 @@ FD_Testing::FD_AudioTestState::FD_AudioTestState(std::weak_ptr<FD_Scene> s)
 		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
 	background->assimilate(group);
 	// Add music
-	FD_Handling::lock(scene->getAudioManager()->loadMusic(FD_SONG),
-		music, true);
+	FD_Handling::lock(scene->getAudioManager()->loadMusic(FD_SONG), music, true);
+	FD_Handling::lock(scene->getAudioManager()->loadSoundEffect(FD_BLIP), sfx, true);
 	// Create the buttons
 	int increment{ 0 };
 	std::shared_ptr<FD_Font> def_font;
@@ -464,9 +465,26 @@ void FD_Testing::FD_AudioTestState::sleep() {
 }
 
 void FD_Testing::FD_AudioTestState::update() {
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(this->scene, scene, true);
 	int code;
 	while (button_manager->getEvent(code)) {
 		switch (code) {
+		case START_MUSIC:
+			music->playMusic();
+			break;
+		case STOP_MUSIC:
+			scene->getAudioManager()->haltMusic();
+			break;
+		case FADE_IN_MUSIC:
+			music->playMusic(0, 2000);
+			break;
+		case FADE_OUT_MUSIC:
+			scene->getAudioManager()->haltMusic(2000);
+			break;
+		case PLAY_SFX:
+			sfx->play();
+			break;
 		default:
 			std::string debug{ "Unhandled code: " };
 			debug += std::to_string(code);
