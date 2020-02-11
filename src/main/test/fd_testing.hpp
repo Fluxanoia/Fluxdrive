@@ -15,7 +15,8 @@ namespace FD_Testing {
 		FD_TEST_CHOICE_STATE,
 		FD_TEST_CAMERA_STATE,
 		FD_TEST_EVENT_STATE,
-		FD_TEST_AUDIO_STATE
+		FD_TEST_AUDIO_STATE,
+		FD_TEST_TEMP_STATE
 	};
 
 	enum FD_TestRegisters {
@@ -36,12 +37,14 @@ namespace FD_Testing {
 			CAMERA_TEST,
 			EVENT_TEST,
 			AUDIO_TEST,
+			TEMP_TEST,
 			QUIT
 		};
 		std::vector<std::string> button_titles{
 			"Camera Test",
 			"Event Listener Test",
 			"Audio Test",
+			"Temporary Test",
 			"Quit"
 		};
 
@@ -80,6 +83,7 @@ namespace FD_Testing {
 		};
 
 		enum ButtonResponses {
+			TOGGLE_FULLSCREEN,
 			SWITCH_CAMERAS,
 			SHAKE_CAMERA,
 
@@ -90,6 +94,7 @@ namespace FD_Testing {
 			RESIZE_WINDOW
 		};
 		std::vector<std::string> button_titles{
+			"Toggle Fullscreen",
 			"Switch Cameras",
 			"Shake Camera"
 		};
@@ -197,6 +202,38 @@ namespace FD_Testing {
 
 		FD_AudioTestState(std::weak_ptr<FD_Scene> scene);
 		~FD_AudioTestState();
+
+		void sleep() override;
+		void wake() override;
+		void update() override;
+
+		void resized(int w, int h) override;
+	};
+
+	class FD_TemporaryTestState : public FD_State {
+	private:
+
+		enum Inputs {
+			BACK,
+
+			SWITCH
+		};
+
+		FD_CameraIndex camera;
+		std::shared_ptr<FD_CameraSet> cameras;
+		std::shared_ptr<FD_Font> font;
+		std::shared_ptr<FD_Text> alert;
+		size_t forefront_index{ 0 };
+		std::vector<std::shared_ptr<FD_ObjectGroup>> groups{};
+		std::vector<std::shared_ptr<FD_Element>> elements{};
+		std::shared_ptr<FD_InputSet> input;
+
+		std::shared_ptr<FD_Element> background;
+
+	public:
+
+		FD_TemporaryTestState(std::weak_ptr<FD_Scene> scene);
+		~FD_TemporaryTestState();
 
 		void sleep() override;
 		void wake() override;

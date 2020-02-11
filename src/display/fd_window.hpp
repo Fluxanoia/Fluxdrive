@@ -104,13 +104,27 @@ public:
 		\return Whether the window is fullscreen or not.
 	*/
 	bool isFullscreen() const;
-	//! Returns the width of the window.
+	//! Returns the width of the window when it's not fullscreen.
 	/*!
+		\return The width of the window when it's not fullscreen.
+	*/
+	int getWindowedWidth() const;
+	//! Returns the height of the window when it's not fullscreen.
+	/*!
+		\return The height of the window when it's not fullscreen.
+	*/
+	int getWindowedHeight() const;
+	//! Returns the current width of the window.
+	/*!
+		If the window is fullscreen, this returns the screen width.
+		
 		\return The width of the window.
 	*/
 	int getWidth() const;
-	//! Returns the height of the window.
+	//! Returns the current height of the window.
 	/*!
+		If the window is fullscreen, this returns the screen height.
+
 		\return The height of the window.
 	*/
 	int getHeight() const;

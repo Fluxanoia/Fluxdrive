@@ -56,11 +56,11 @@ void FD_Scene::readDisplaySettings() {
 		getKey(FD_KEY_FULLSCREEN), fullscreen, def_fullscreen)) {
 		FD_Handling::error("Settings file could not be read.", true);
 	}
+	win->setResolution(window_width, window_height);
 	if (fullscreen) {
 		win->setFullscreen();
 	} else {
 		win->setWindowed();
-		win->setResolution(window_width, window_height);
 	}
 }
 void FD_Scene::writeDisplaySettings() {
@@ -72,13 +72,13 @@ void FD_Scene::writeDisplaySettings() {
 	}
 	if (!settings->setValue(
 		getKey(FD_KEY_RESOLUTION_WIDTH), 
-		std::to_string(win->getWidth()))) {
+		std::to_string(win->getWindowedWidth()))) {
 		FD_Handling::error("Settings file could not be read.", true);
 		return;
 	}
 	if (!settings->setValue(
 		getKey(FD_KEY_RESOLUTION_HEIGHT), 
-		std::to_string(win->getHeight()))) {
+		std::to_string(win->getWindowedHeight()))) {
 		FD_Handling::error("Settings file could not be read.", true);
 		return;
 	}

@@ -2,6 +2,17 @@
 
 // Runs the test suite
 void FD_Testing::test() {
+	SDL_version compiled;
+	SDL_version linked;
+	SDL_VERSION(&compiled);
+	SDL_GetVersion(&linked);
+	std::string cv{ std::to_string(compiled.major) + "." + 
+		std::to_string(compiled.minor) + "." + std::to_string(compiled.patch) };
+	std::string lv{ std::to_string(linked.major) + "." + 
+		std::to_string(linked.minor) + "." + std::to_string(linked.patch) };
+	FD_Handling::debug(("Tests are compiling on SDL version : " + cv).c_str());
+	FD_Handling::debug(("Tests are linking on SDL version   : " + lv).c_str());
+
 	// Runs visual test
 	std::shared_ptr<FD_Window> window{ std::make_shared<FD_Window>("Fluxdrive Test", 640, 360) };
 #ifdef FD_TEST_MANUAL_SCENE
@@ -24,10 +35,12 @@ void FD_Testing::test() {
 	std::shared_ptr<FD_CameraTestState> camera_test{ std::make_shared<FD_CameraTestState>(scene) };
 	std::shared_ptr<FD_EventTestState> event_test{ std::make_shared<FD_EventTestState>(scene) };
 	std::shared_ptr<FD_AudioTestState> audio_test{ std::make_shared<FD_AudioTestState>(scene) };
+	std::shared_ptr<FD_TemporaryTestState> temp_test{ std::make_shared<FD_TemporaryTestState>(scene) };
 	state_manager->logState(choice_test);
 	state_manager->logState(camera_test);
 	state_manager->logState(event_test);
 	state_manager->logState(audio_test);
+	state_manager->logState(temp_test);
 	state_manager->setState(FD_TEST_CHOICE_STATE);
 
 	state_manager->logEventListener(event_test->getEventListener());
@@ -98,6 +111,9 @@ void FD_Testing::FD_TestChoiceState::update() {
 		case AUDIO_TEST:
 			nextState = FD_TEST_AUDIO_STATE;
 			break;
+		case TEMP_TEST:
+			nextState = FD_TEST_TEMP_STATE;
+			break;
 		case QUIT:
 			closed = true;
 			break;
@@ -109,7 +125,7 @@ void FD_Testing::FD_TestChoiceState::update() {
 		}
 	}
 	background->update();
-	button_manager->update();
+button_manager->update();
 }
 
 void FD_Testing::FD_TestChoiceState::resized(int w, int h) {
@@ -118,7 +134,8 @@ void FD_Testing::FD_TestChoiceState::resized(int w, int h) {
 	if (background->getWidth() > background->getHeight()) {
 		background->setHeight(h);
 		background->getTweenScaleX()->set(background->getHeightScale());
-	} else {
+	}
+	else {
 		background->setWidth(w);
 		background->getTweenScaleY()->set(background->getWidthScale());
 	}
@@ -126,7 +143,7 @@ void FD_Testing::FD_TestChoiceState::resized(int w, int h) {
 
 // Camera Test State Member Functions
 
-FD_Testing::FD_CameraTestState::FD_CameraTestState(std::weak_ptr<FD_Scene> s) 
+FD_Testing::FD_CameraTestState::FD_CameraTestState(std::weak_ptr<FD_Scene> s)
 	: FD_State(FD_TEST_CAMERA_STATE, s) {
 	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(s, scene, true);
@@ -145,7 +162,7 @@ FD_Testing::FD_CameraTestState::FD_CameraTestState(std::weak_ptr<FD_Scene> s)
 	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
 	// Add background
 	std::shared_ptr<FD_FileImage> bg_image;
-	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND), 
+	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND),
 		bg_image, true);
 	background = std::make_shared<FD_Element>(bg_image,
 		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
@@ -166,7 +183,7 @@ FD_Testing::FD_CameraTestState::FD_CameraTestState(std::weak_ptr<FD_Scene> s)
 			increment, s, def_font, colour);
 		increment++;
 	}
-	std::vector<int> codes{ SWITCH_CAMERAS_INSTANT, 
+	std::vector<int> codes{ SWITCH_CAMERAS_INSTANT,
 		SWITCH_CAMERAS_SMOOTH, SWITCH_CAMERAS_PRESERVED };
 	std::vector<std::string> texts{ "Instant", "Smooth", "Smooth (preserved)" };
 	button_manager->addDropdownButton(temp, 0, -90, codes, texts, def_font, colour);
@@ -203,9 +220,18 @@ void FD_Testing::FD_CameraTestState::sleep() {
 void FD_Testing::FD_CameraTestState::update() {
 	int code;
 	std::shared_ptr<FD_Camera> cam;
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(this->scene, scene, true);
 	FD_Handling::lock(cameras->getCurrentCamera(), cam, true);
 	while (button_manager->getEvent(code)) {
 		switch (code) {
+		case TOGGLE_FULLSCREEN:
+			if (scene->getWindow()->isFullscreen()) {
+				scene->getWindow()->setWindowed();
+			} else {
+				scene->getWindow()->setFullscreen();
+			}
+			break;
 		case SWITCH_CAMERAS:
 			if (cameras->getCurrentCameraID() == camera_1) {
 				cameras->transitionCamera(camera_2);
@@ -230,9 +256,7 @@ void FD_Testing::FD_CameraTestState::update() {
 			if (res >= 0 && static_cast<Uint32>(res) < resolutions.size()) {
 				int res_x{ resolutions.at(res).x };
 				int res_y{ resolutions.at(res).y };
-				std::shared_ptr<FD_Scene> s;
-				FD_Handling::lock(scene, s);
-				s->getWindow()->setResolution(res_x, res_y);
+				scene->getWindow()->setResolution(res_x, res_y);
 				break;
 			}
 			std::string debug{ "Unhandled code: " };
@@ -505,6 +529,92 @@ void FD_Testing::FD_AudioTestState::update() {
 }
 
 void FD_Testing::FD_AudioTestState::resized(int w, int h) {
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(this->scene, scene, true);
+	if (background->getWidth() > background->getHeight()) {
+		background->setHeight(h);
+		background->getTweenScaleX()->set(background->getHeightScale());
+	}
+	else {
+		background->setWidth(w);
+		background->getTweenScaleY()->set(background->getWidthScale());
+	}
+}
+
+// Temporary Test State Member Functions
+
+FD_Testing::FD_TemporaryTestState::FD_TemporaryTestState(std::weak_ptr<FD_Scene> s)
+	: FD_State(FD_TEST_EVENT_STATE, s) {
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(s, scene, true);
+	// Create the group and camera set
+	cameras = std::make_shared<FD_CameraSet>(scene->getWindow());
+	camera = cameras->addCamera(1920);
+	// Add background
+	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
+	std::shared_ptr<FD_FileImage> bg_image;
+	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND), bg_image, true);
+	background = std::make_shared<FD_Element>(bg_image,
+		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
+	for (int i = 0; i < 8; i++) {
+		std::shared_ptr<FD_ObjectGroup> group = std::make_shared<FD_ObjectGroup>(object_list);
+		groups.push_back(group);
+		group->setCameraSet(cameras);
+		scene->addObjectGroup(group);
+
+		std::shared_ptr<FD_Element> element = std::make_shared<FD_Element>(bg_image,
+			50, 50 + i * 60, 0, 10, 0.05, 0.05, false, FD_TOP_LEFT);
+		elements.push_back(element);
+		element->assimilate(group);
+	}
+	// Assimilate background
+	background->assimilate(groups.front());
+	// Grab the font
+	SDL_Color colour = { 255, 255, 255, 255 };
+	FD_Handling::lock(im->loadFont(FD_FONT, 32), font, true);
+	// Add alert
+	alert = std::make_shared<FD_Text>(
+		scene->getWindow()->getRenderer(), font,
+		"Current code is set to ", "0", "!", colour, 
+		0, 0, FD_CENTERED, 10, true);
+	alert->assimilate(groups.front());
+	// Get the input
+	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
+		input, true);
+	input->addKeyMap(FD_MAP_RELEASED, SDLK_ESCAPE, BACK);
+	input->addKeyMap(FD_MAP_RELEASED, SDLK_w, SWITCH);
+}
+FD_Testing::FD_TemporaryTestState::~FD_TemporaryTestState() {  }
+
+void FD_Testing::FD_TemporaryTestState::wake() {
+	FD_State::wake();
+}
+
+void FD_Testing::FD_TemporaryTestState::sleep() { }
+
+void FD_Testing::FD_TemporaryTestState::update() {
+	FD_InputEvent e;
+	while (input->getEvent(e)) {
+		switch (e.code) {
+		case BACK:
+			nextState = FD_TEST_CHOICE_STATE;
+			break;
+		case SWITCH:
+			forefront_index++;
+			if (forefront_index == groups.size()) forefront_index = 0;
+			alert->changeText(std::to_string(forefront_index));
+			for (size_t i = 0; i < groups.size(); i++) {
+				Uint8 end{ 40 };
+				if (i == forefront_index) end = 255;
+				groups.at(i)->getTweenOpacity()->move(FD_TWEEN_EASE_IN, end, 1000);
+			}
+			break;
+		}
+	}
+	background->update();
+}
+
+void FD_Testing::FD_TemporaryTestState::resized(int w, int h) {
 	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(this->scene, scene, true);
 	if (background->getWidth() > background->getHeight()) {

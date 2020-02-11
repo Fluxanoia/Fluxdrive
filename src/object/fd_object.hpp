@@ -280,9 +280,9 @@ public:
 		\sa setUnderlayColour
 	*/
 	void setOverlayColour(SDL_Colour colour);
-	//! Set the visibility of the line.
+	//! Set the visibility of the box.
 	/*!
-		\param visible Whether the line should be visible or not.
+		\param visible Whether the box should be visible or not.
 	*/
 	void setVisible(bool visible);
 

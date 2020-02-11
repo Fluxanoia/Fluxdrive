@@ -154,7 +154,7 @@ void FD_Line::supplyPoints(SDL_Point* p1, SDL_Point* p2) {
 
 void FD_Line::render(SDL_Renderer* renderer, const Uint8 alpha,
 	const std::shared_ptr<const FD_Camera> camera) const {
-	if (alpha == 0) return;
+	if (alpha == 0 || !visible) return;
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	Uint8 colour_alpha = colour.a;
 	if (alpha != 255) {
@@ -253,8 +253,7 @@ void FD_Box::supplyRect(SDL_Rect* rect) {
 
 void FD_Box::render(SDL_Renderer* renderer, const Uint8 alpha,
 	const std::shared_ptr<const FD_Camera> camera) const {
-	if (alpha == 0) return;
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	if (alpha == 0 || !visible) return;
 	Uint8 colour_alpha = static_cast<Uint8>(colour.a * (alpha / 255.0)
 		* (opacity->value() / 255.0));
 	Uint8 underlay_alpha = static_cast<Uint8>(underlay_colour.a * (alpha / 255.0)
@@ -274,6 +273,7 @@ void FD_Box::render(SDL_Renderer* renderer, const Uint8 alpha,
 		double angle;
 		if (!camera->manipulate(dr, angle)) return;
 	}
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, underlay_colour.r,
 		underlay_colour.g, underlay_colour.b, underlay_alpha);
 	SDL_RenderFillRect(renderer, &dr);

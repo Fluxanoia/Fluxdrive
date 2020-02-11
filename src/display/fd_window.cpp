@@ -40,7 +40,13 @@ void FD_Window::pushEvent(SDL_WindowEvent e) {
 	case SDL_WINDOWEVENT_RESTORED:
 	case SDL_WINDOWEVENT_MAXIMIZED:
 	case SDL_WINDOWEVENT_SIZE_CHANGED:
-		for (auto r : resizeables) r->resized(window_width, window_height);
+		for (auto r : resizeables) {
+			if (fullscreen) {
+				r->resized(getScreenWidth(), getScreenHeight());
+			} else {
+				r->resized(window_width, window_height);
+			}
+		}
 		break;
 	}
 }
@@ -95,10 +101,18 @@ SDL_Renderer* FD_Window::getRenderer() const {
 bool FD_Window::isFullscreen() const {
 	return fullscreen;
 }
+int FD_Window::getWindowedWidth() const {
+	return window_width;
+}
+int FD_Window::getWindowedHeight() const {
+	return window_height;
+}
 int FD_Window::getWidth() const {
+	if (fullscreen) return getScreenWidth();
 	return window_width;
 }
 int FD_Window::getHeight() const {
+	if (fullscreen) return getScreenHeight();
 	return window_height;
 }
 int FD_Window::getScreenWidth() const {
