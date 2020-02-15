@@ -10,6 +10,7 @@
 
 #include "fd_paths.hpp"
 #include "fd_registry.hpp"
+#include "../maths/fd_maths.hpp"
 #include "../display/fd_resizable.hpp"
 
 /*!
@@ -129,19 +130,6 @@ protected:
 
 	//! Updates the dimensions and loaded status of the image.
 	void query();
-	//! Extrudes a rectangle.
-	/*!
-		Increases the width and height by double the given extrusion value,
-		centered about the centre of the rectangle.
-
-		\param rect The rectangle to extrude.
-		\param size The amount to extrude.
-		
-		\return The extruded rectangle.
-
-		\sa extrusion
-	*/
-	SDL_Rect extrude(const SDL_Rect rect, const int size);
 
 public:
 

@@ -1,11 +1,19 @@
 #include "fd_maths.hpp"
 
+SDL_Rect FD_Maths::extrude(const SDL_Rect rect, const int size) {
+	return { rect.x - size, rect.y - size, rect.w + 2 * size, rect.h + 2 * size };
+}
+
+FD_Rect FD_Maths::extrude(const FD_Rect rect, const double size) {
+	return { rect.x - size, rect.y - size, rect.w + 2 * size, rect.h + 2 * size };
+}
+
 bool FD_Maths::pointInRect(const int x, const int y, const SDL_Rect* r) {
 	SDL_Point p{ x, y };
 	return FD_Maths::pointInRect(&p, r);
 }
 
-bool FD_Maths::pointInRect(const int x, const int y, const FD_Rect* r) {
+bool FD_Maths::pointInRect(const double x, const double y, const FD_Rect* r) {
 	FD_Point p{ x, y };
 	return FD_Maths::pointInRect(&p, r);
 }
@@ -26,19 +34,19 @@ bool FD_Maths::pointInRect(const FD_Point* p, const FD_Rect* r) {
 bool FD_Maths::hasIntersection(const SDL_Rect* a, const SDL_Rect* b) {
 	if (a == nullptr || b == nullptr) return false;
 	if (a->w == 0 || a->h == 0 || b->w == 0 || b->h == 0) return false;
-	if (a->x >= b->x + b->w) return false;
-	if (a->x + a->w <= b->x) return false;
-	if (a->y >= b->y + b->h) return false;
-	if (a->y + a->h <= b->y) return false;
+	if (a->x > b->x + b->w) return false;
+	if (a->x + a->w < b->x) return false;
+	if (a->y > b->y + b->h) return false;
+	if (a->y + a->h < b->y) return false;
 	return true;
 }
 bool FD_Maths::hasIntersection(const FD_Rect* a, const FD_Rect* b) {
 	if (a == nullptr || b == nullptr) return false;
 	if (a->w == 0 || a->h == 0 || b->w == 0 || b->h == 0) return false;
-	if (a->x >= b->x + b->w) return false;
-	if (a->x + a->w <= b->x) return false;
-	if (a->y >= b->y + b->h) return false;
-	if (a->y + a->h <= b->y) return false;
+	if (a->x > b->x + b->w) return false;
+	if (a->x + a->w < b->x) return false;
+	if (a->y > b->y + b->h) return false;
+	if (a->y + a->h < b->y) return false;
 	return true;
 }
 
@@ -53,13 +61,13 @@ bool FD_Maths::intersection(const SDL_Rect* a, const SDL_Rect* b, SDL_Rect* inte
 		? a->y + a->h : b->y + b->h;
 	intersection->w = p.x - intersection->x;
 	intersection->h = p.y - intersection->y;
-	if (intersection->w <= 0) return false;
-	if (intersection->h <= 0) return false;
+	if (intersection->w < 0) return false;
+	if (intersection->h < 0) return false;
 	return true;
 }
 bool FD_Maths::intersection(const FD_Rect* a, const FD_Rect* b, FD_Rect* intersection) {
 	if (!hasIntersection(a, b)) return false;
-	SDL_Point p;
+	FD_Point p;
 	intersection->x = (a->x > b->x) ? a->x : b->x;
 	intersection->y = (a->y > b->y) ? a->y : b->y;
 	p.x = (a->x + a->w < b->x + b->w)
@@ -68,7 +76,7 @@ bool FD_Maths::intersection(const FD_Rect* a, const FD_Rect* b, FD_Rect* interse
 		? a->y + a->h : b->y + b->h;
 	intersection->w = p.x - intersection->x;
 	intersection->h = p.y - intersection->y;
-	if (intersection->w <= 0) return false;
-	if (intersection->h <= 0) return false;
+	if (intersection->w < 0) return false;
+	if (intersection->h < 0) return false;
 	return true;
 }

@@ -34,6 +34,23 @@ typedef struct FD_Rect_ {
 //! The namespace containing generic mathematical operations.
 namespace FD_Maths {
 
+	//! Extrudes a rectangle.
+	/*! Increases the width and height by double the given extrusion value,
+		centered about the centre of the rectangle.
+		\param rect The rectangle to extrude.
+		\param size The amount to extrude.
+		\return The extruded rectangle.
+		\sa extrusion */
+	SDL_Rect extrude(const SDL_Rect rect, const int size);
+	//! Extrudes a rectangle.
+	/*! Increases the width and height by double the given extrusion value,
+		centered about the centre of the rectangle.
+		\param rect The rectangle to extrude.
+		\param size The amount to extrude.
+		\return The extruded rectangle.
+		\sa extrusion */
+	FD_Rect extrude(const FD_Rect rect, const double size);
+
 	//! Checks whether a point is in a rectangle or not.
 	/*! This operation is inclusive of the edges of the rectangle.
 		\param x The x coordinate of the point in question.
@@ -49,7 +66,7 @@ namespace FD_Maths {
 		\param r The rectangle in question.
 		\return Returns whether the given point is in the rectangle or not.
 		\sa pointInRect */
-	bool pointInRect(const int x, const int y, const FD_Rect* r);
+	bool pointInRect(const double x, const double y, const FD_Rect* r);
 	//! Checks whether a point is in a rectangle or not.
 	/*! This operation is inclusive of the edges of the rectangle.
 		\param p The point in question.

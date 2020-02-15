@@ -38,11 +38,6 @@ FD_Image::~FD_Image() {
 	if (texture != nullptr) SDL_DestroyTexture(texture);
 }
 
-// Extrudes a rectangle
-SDL_Rect FD_Image::extrude(const SDL_Rect rect, const int size) {
-	return { rect.x - size, rect.y - size, rect.w + 2 * size, rect.h + 2 * size };
-}
-
 // Gets information about the image and checks if it's loaded
 void FD_Image::query() {
 	if (texture != nullptr) {
@@ -67,7 +62,7 @@ void FD_Image::render(SDL_Renderer* renderer, const Uint8 alpha, const SDL_Rect*
 	temp_center.y = static_cast<int>(center_y * dstrect->h);
 	SDL_Rect temp_dstrect = (dstrect == nullptr) ? SDL_Rect() : SDL_Rect(*dstrect);
 	// Extrude if needed
-	if (extrusion > 0) temp_dstrect = extrude(temp_dstrect, extrusion);
+	if (extrusion > 0) temp_dstrect = FD_Maths::extrude(temp_dstrect, extrusion);
 	// Set the renderer and the texture's blend modes
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
