@@ -97,9 +97,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5b97715b4b7292a85e83d37cc2222be5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#a5b97715b4b7292a85e83d37cc2222be5">~FD_Image</a> ()</td></tr>
 <tr class="memdesc:a5b97715b4b7292a85e83d37cc2222be5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_f_d___image.html" title="The FD_Image class, manages all types of visual information.">FD_Image</a>.  <a href="class_f_d___image.html#a5b97715b4b7292a85e83d37cc2222be5">More...</a><br /></td></tr>
 <tr class="separator:a5b97715b4b7292a85e83d37cc2222be5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c15da9079e21253307dae5e4998fca7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#a8c15da9079e21253307dae5e4998fca7">render</a> (SDL_Renderer *renderer, const Uint8 alpha=255, const SDL_Rect *srcrect=nullptr, const SDL_Rect *dstrect=nullptr, const double angle=0.0, const double center_x=0.5, const double center_y=0.5, const SDL_RendererFlip flip=SDL_FLIP_NONE)</td></tr>
-<tr class="memdesc:a8c15da9079e21253307dae5e4998fca7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the image.  <a href="class_f_d___image.html#a8c15da9079e21253307dae5e4998fca7">More...</a><br /></td></tr>
-<tr class="separator:a8c15da9079e21253307dae5e4998fca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ccf0fcbb601bbbca450b8a62e7bdb96"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#a0ccf0fcbb601bbbca450b8a62e7bdb96">render</a> (SDL_Renderer *renderer, Uint8 alpha=255, const SDL_Rect *srcrect=nullptr, const SDL_Rect *dstrect=nullptr, double angle=0.0, double center_x=0.5, double center_y=0.5, SDL_RendererFlip flip=SDL_FLIP_NONE, SDL_BlendMode blend=SDL_BLENDMODE_NONE, const SDL_Rect *clip=nullptr)</td></tr>
+<tr class="memdesc:a0ccf0fcbb601bbbca450b8a62e7bdb96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the image.  <a href="class_f_d___image.html#a0ccf0fcbb601bbbca450b8a62e7bdb96">More...</a><br /></td></tr>
+<tr class="separator:a0ccf0fcbb601bbbca450b8a62e7bdb96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab537ad31f1ed5aa719bc30a2a4a41f76"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#ab537ad31f1ed5aa719bc30a2a4a41f76">verify</a> (const <a class="el" href="fd__image_manager_8hpp.html#a075f9664b842f3112910b3d7f18c2ff2">FD_ImageRegister</a> reg) const</td></tr>
 <tr class="memdesc:ab537ad31f1ed5aa719bc30a2a4a41f76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether two images are identical using a register.  <a href="class_f_d___image.html#ab537ad31f1ed5aa719bc30a2a4a41f76">More...</a><br /></td></tr>
 <tr class="separator:ab537ad31f1ed5aa719bc30a2a4a41f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,10 +130,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
 Protected Types</h2></td></tr>
-<tr class="memitem:ae655a70c818fbacf9bc4378d2ec452c9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9">ImageType</a> { <a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9a6cad493c5ec25c3a7ee39d23cd56fa99">IT_INVALID</a> = -1, 
+<tr class="memitem:ae655a70c818fbacf9bc4378d2ec452c9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9">ImageType</a> { <br />
+&#160;&#160;<a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9a6cad493c5ec25c3a7ee39d23cd56fa99">IT_INVALID</a> = -1, 
 <a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9a09bdc0ea3fc764bc19dd006bd6c0ea5f">IT_TEXT</a>, 
 <a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9acc8b9ce2e7e546c6c444625d45211f3c">IT_FILE</a>, 
-<a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9ab8aca4d7cc256da93f1a5bd7ed305e58">IT_PURE</a>
+<a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9ab8aca4d7cc256da93f1a5bd7ed305e58">IT_PURE</a>, 
+<br />
+&#160;&#160;<a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9aee4114b5dc22fbbccced964c78a7d952">IT_GEOM</a>
+<br />
  }</td></tr>
 <tr class="memdesc:ae655a70c818fbacf9bc4378d2ec452c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The different image types.  <a href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9">More...</a><br /></td></tr>
 <tr class="separator:ae655a70c818fbacf9bc4378d2ec452c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +207,8 @@ Protected Attributes</h2></td></tr>
 <tr><td class="fieldname"><a id="ae655a70c818fbacf9bc4378d2ec452c9acc8b9ce2e7e546c6c444625d45211f3c"></a>IT_FILE&#160;</td><td class="fielddoc"><p>Corresponds to <a class="el" href="class_f_d___file_image.html" title="The FD_FileImage class, specialising the image to work with files.">FD_FileImage</a>. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ae655a70c818fbacf9bc4378d2ec452c9ab8aca4d7cc256da93f1a5bd7ed305e58"></a>IT_PURE&#160;</td><td class="fielddoc"><p>Corresponds to <a class="el" href="class_f_d___pure_image.html" title="The FD_PureImage class, specialises the image for custom renderered texture.">FD_PureImage</a>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae655a70c818fbacf9bc4378d2ec452c9aee4114b5dc22fbbccced964c78a7d952"></a>IT_GEOM&#160;</td><td class="fielddoc"><p>Corresponds to FD_GeomImage. </p>
 </td></tr>
 </table>
 
@@ -356,8 +362,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8c15da9079e21253307dae5e4998fca7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c15da9079e21253307dae5e4998fca7">&#9670;&nbsp;</a></span>render()</h2>
+<a id="a0ccf0fcbb601bbbca450b8a62e7bdb96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ccf0fcbb601bbbca450b8a62e7bdb96">&#9670;&nbsp;</a></span>render()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -374,7 +380,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const Uint8&#160;</td>
+          <td class="paramtype">Uint8&#160;</td>
           <td class="paramname"><em>alpha</em> = <code>255</code>, </td>
         </tr>
         <tr>
@@ -392,26 +398,38 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>angle</em> = <code>0.0</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>center_x</em> = <code>0.5</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>center_y</em> = <code>0.5</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const SDL_RendererFlip&#160;</td>
-          <td class="paramname"><em>flip</em> = <code>SDL_FLIP_NONE</code>&#160;</td>
+          <td class="paramtype">SDL_RendererFlip&#160;</td>
+          <td class="paramname"><em>flip</em> = <code>SDL_FLIP_NONE</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SDL_BlendMode&#160;</td>
+          <td class="paramname"><em>blend</em> = <code>SDL_BLENDMODE_NONE</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const SDL_Rect *&#160;</td>
+          <td class="paramname"><em>clip</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -437,6 +455,8 @@ Protected Attributes</h2></td></tr>
     <tr><td class="paramname">center_x</td><td>The x center of the image relative to its top left corner, in units of the image's width. </td></tr>
     <tr><td class="paramname">center_y</td><td>The y center of the image relative to its top left corner, in units of the image's height. </td></tr>
     <tr><td class="paramname">flip</td><td>The flip flags of the image. </td></tr>
+    <tr><td class="paramname">blend</td><td>The blend mode of the image. </td></tr>
+    <tr><td class="paramname">clip</td><td>The clip rectangle of the image. </td></tr>
   </table>
   </dd>
 </dl>

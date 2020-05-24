@@ -95,6 +95,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab183f963e0d2357f57108dab36964137"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___text_image.html#ab183f963e0d2357f57108dab36964137">changeText</a> (SDL_Renderer *renderer, std::string text)</td></tr>
 <tr class="memdesc:ab183f963e0d2357f57108dab36964137"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the text of the image.  <a href="class_f_d___text_image.html#ab183f963e0d2357f57108dab36964137">More...</a><br /></td></tr>
 <tr class="separator:ab183f963e0d2357f57108dab36964137"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c49c18ec8b43bca4287e93c367eef68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___text_image.html#a3c49c18ec8b43bca4287e93c367eef68">setTextColour</a> (SDL_Colour c)</td></tr>
+<tr class="memdesc:a3c49c18ec8b43bca4287e93c367eef68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the colour of the text.  <a href="class_f_d___text_image.html#a3c49c18ec8b43bca4287e93c367eef68">More...</a><br /></td></tr>
+<tr class="separator:a3c49c18ec8b43bca4287e93c367eef68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_f_d___image"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_f_d___image')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_f_d___image.html">FD_Image</a></td></tr>
 <tr class="memitem:a6fc4b9809723c434cba8960d61b01aaa inherit pub_methods_class_f_d___image"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#a6fc4b9809723c434cba8960d61b01aaa">FD_Image</a> (const <a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9">ImageType</a> <a class="el" href="class_f_d___image.html#a1eb563fd6b46ae24c2bf1177d8c5ca0c">type</a>)</td></tr>
 <tr class="memdesc:a6fc4b9809723c434cba8960d61b01aaa inherit pub_methods_class_f_d___image"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_f_d___image.html" title="The FD_Image class, manages all types of visual information.">FD_Image</a>.  <a href="class_f_d___image.html#a6fc4b9809723c434cba8960d61b01aaa">More...</a><br /></td></tr>
@@ -102,9 +105,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5b97715b4b7292a85e83d37cc2222be5 inherit pub_methods_class_f_d___image"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#a5b97715b4b7292a85e83d37cc2222be5">~FD_Image</a> ()</td></tr>
 <tr class="memdesc:a5b97715b4b7292a85e83d37cc2222be5 inherit pub_methods_class_f_d___image"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_f_d___image.html" title="The FD_Image class, manages all types of visual information.">FD_Image</a>.  <a href="class_f_d___image.html#a5b97715b4b7292a85e83d37cc2222be5">More...</a><br /></td></tr>
 <tr class="separator:a5b97715b4b7292a85e83d37cc2222be5 inherit pub_methods_class_f_d___image"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c15da9079e21253307dae5e4998fca7 inherit pub_methods_class_f_d___image"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#a8c15da9079e21253307dae5e4998fca7">render</a> (SDL_Renderer *renderer, const Uint8 alpha=255, const SDL_Rect *srcrect=nullptr, const SDL_Rect *dstrect=nullptr, const double angle=0.0, const double center_x=0.5, const double center_y=0.5, const SDL_RendererFlip flip=SDL_FLIP_NONE)</td></tr>
-<tr class="memdesc:a8c15da9079e21253307dae5e4998fca7 inherit pub_methods_class_f_d___image"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the image.  <a href="class_f_d___image.html#a8c15da9079e21253307dae5e4998fca7">More...</a><br /></td></tr>
-<tr class="separator:a8c15da9079e21253307dae5e4998fca7 inherit pub_methods_class_f_d___image"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ccf0fcbb601bbbca450b8a62e7bdb96 inherit pub_methods_class_f_d___image"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#a0ccf0fcbb601bbbca450b8a62e7bdb96">render</a> (SDL_Renderer *renderer, Uint8 alpha=255, const SDL_Rect *srcrect=nullptr, const SDL_Rect *dstrect=nullptr, double angle=0.0, double center_x=0.5, double center_y=0.5, SDL_RendererFlip flip=SDL_FLIP_NONE, SDL_BlendMode blend=SDL_BLENDMODE_NONE, const SDL_Rect *clip=nullptr)</td></tr>
+<tr class="memdesc:a0ccf0fcbb601bbbca450b8a62e7bdb96 inherit pub_methods_class_f_d___image"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the image.  <a href="class_f_d___image.html#a0ccf0fcbb601bbbca450b8a62e7bdb96">More...</a><br /></td></tr>
+<tr class="separator:a0ccf0fcbb601bbbca450b8a62e7bdb96 inherit pub_methods_class_f_d___image"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab537ad31f1ed5aa719bc30a2a4a41f76 inherit pub_methods_class_f_d___image"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#ab537ad31f1ed5aa719bc30a2a4a41f76">verify</a> (const <a class="el" href="fd__image_manager_8hpp.html#a075f9664b842f3112910b3d7f18c2ff2">FD_ImageRegister</a> reg) const</td></tr>
 <tr class="memdesc:ab537ad31f1ed5aa719bc30a2a4a41f76 inherit pub_methods_class_f_d___image"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether two images are identical using a register.  <a href="class_f_d___image.html#ab537ad31f1ed5aa719bc30a2a4a41f76">More...</a><br /></td></tr>
 <tr class="separator:ab537ad31f1ed5aa719bc30a2a4a41f76 inherit pub_methods_class_f_d___image"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -136,10 +139,14 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_types_class_f_d___image"><td colspan="2" onclick="javascript:toggleInherit('pro_types_class_f_d___image')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="class_f_d___image.html">FD_Image</a></td></tr>
-<tr class="memitem:ae655a70c818fbacf9bc4378d2ec452c9 inherit pro_types_class_f_d___image"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9">ImageType</a> { <a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9a6cad493c5ec25c3a7ee39d23cd56fa99">IT_INVALID</a> = -1, 
+<tr class="memitem:ae655a70c818fbacf9bc4378d2ec452c9 inherit pro_types_class_f_d___image"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9">ImageType</a> { <br />
+&#160;&#160;<a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9a6cad493c5ec25c3a7ee39d23cd56fa99">IT_INVALID</a> = -1, 
 <a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9a09bdc0ea3fc764bc19dd006bd6c0ea5f">IT_TEXT</a>, 
 <a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9acc8b9ce2e7e546c6c444625d45211f3c">IT_FILE</a>, 
-<a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9ab8aca4d7cc256da93f1a5bd7ed305e58">IT_PURE</a>
+<a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9ab8aca4d7cc256da93f1a5bd7ed305e58">IT_PURE</a>, 
+<br />
+&#160;&#160;<a class="el" href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9aee4114b5dc22fbbccced964c78a7d952">IT_GEOM</a>
+<br />
  }</td></tr>
 <tr class="memdesc:ae655a70c818fbacf9bc4378d2ec452c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The different image types.  <a href="class_f_d___image.html#ae655a70c818fbacf9bc4378d2ec452c9">More...</a><br /></td></tr>
 <tr class="separator:ae655a70c818fbacf9bc4378d2ec452c9 inherit pro_types_class_f_d___image"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -293,6 +300,33 @@ Additional Inherited Members</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">renderer</td><td>The renderer to use. </td></tr>
     <tr><td class="paramname">text</td><td>The new text. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3c49c18ec8b43bca4287e93c367eef68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c49c18ec8b43bca4287e93c367eef68">&#9670;&nbsp;</a></span>setTextColour()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FD_TextImage::setTextColour </td>
+          <td>(</td>
+          <td class="paramtype">SDL_Colour&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Changes the colour of the text. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This does not redraw the image.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>The new text colour. </td></tr>
   </table>
   </dd>
 </dl>

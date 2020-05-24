@@ -98,61 +98,61 @@ $(function() {
 <div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="struct_f_d___tween_action__.html#ad48c3a3f92e5617a90eb985b95128b9b">   44</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="struct_f_d___tween_action__.html#ad48c3a3f92e5617a90eb985b95128b9b">uses</a>{ 0 };</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <a class="code" href="fd__tween_8hpp.html#ae7782ed038bc7384f3ad90fd7a6a4ec9">FD_TweenAction</a>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="class_f_d___tween.html">   47</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_f_d___tween.html">FD_Tween</a> {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="comment">// The type of tween</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="fd__tween_8hpp.html#a81baf2c6896bcef25f938ad03be5c653">FD_TweenType</a> tweenType{ <a class="code" href="fd__tween_8hpp.html#a81baf2c6896bcef25f938ad03be5c653a40cb0a89cb0fdc44e86732528fda889c">FD_TWEEN_LINEAR</a> };</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// The starting time and the duration</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    Uint32 start_time{ 0 }, duration{ 0 };</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">// The source and destination values</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">double</span> start_value{ 0 }, end_value{ 0 };</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// Variables for detecting whether the tween </span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// has moved since it was last checked</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    Uint32 last_checked{ 0 };</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">bool</span> force_moved{ <span class="keyword">true</span> };</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="comment">// Whether we have declared that the tween has ended</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">bool</span> has_finished{ <span class="keyword">false</span> };</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    Uint32 getProgress();</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> linearTween(<span class="keywordtype">double</span> s, <span class="keywordtype">double</span> e, Uint32 t, Uint32 d);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> easeInTween(<span class="keywordtype">double</span> s, <span class="keywordtype">double</span> e, Uint32 t, Uint32 d);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> easeOutTween(<span class="keywordtype">double</span> s, <span class="keywordtype">double</span> e, Uint32 t, Uint32 d);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> elasticTween(<span class="keywordtype">double</span> s, <span class="keywordtype">double</span> e, Uint32 t, Uint32 d);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="class_f_d___tween.html#a7cd16d1d7576e247370d78cfe93b25c4">FD_Tween</a>(<span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a> = 0);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="class_f_d___tween.html#a2a432566fbc31969e2910f7513c0c4ef">~FD_Tween</a>();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_f_d___tween.html#af15b15c19e97d1d646e78832650c55f2">set</a>(<span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a>);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_f_d___tween.html#a810165119ca391d68505e5dd97a600b1">add</a>(<span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a>);</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_f_d___tween.html#a6c175c0a5e0d98e4c36abd975ff1f107">move</a>(<a class="code" href="fd__tween_8hpp.html#a81baf2c6896bcef25f938ad03be5c653">FD_TweenType</a> tweenType, <span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#ad972e829c0823b9b48a1d9ba6ec0884b">destination</a>, Uint32 duration, Uint32 pause = 0);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_f_d___tween.html#a0e4957c7c44c36d12fbbc7dff7131bcc">apply</a>(<a class="code" href="struct_f_d___tween_action__.html">FD_TweenAction</a> &amp;action);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#ad972e829c0823b9b48a1d9ba6ec0884b">destination</a>();</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a>();</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_f_d___tween.html#a4228ae4a52dcec7cb33c3b3e074794fa">moved</a>();</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_f_d___tween.html#a2d9abee80a4cbfb40ebd278064397f1b">going</a>(<span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_f_d___tween.html#aa7195cf956b842401c21b1a489816723">done</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_f_d___tween.html#a0f06592f317ed5ecfcc3e63767796185">finished</a>();</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;};</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="class_f_d___tween.html">   48</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_f_d___tween.html">FD_Tween</a> {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// The type of tween</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="fd__tween_8hpp.html#a81baf2c6896bcef25f938ad03be5c653">FD_TweenType</a> tweenType{ <a class="code" href="fd__tween_8hpp.html#a81baf2c6896bcef25f938ad03be5c653a40cb0a89cb0fdc44e86732528fda889c">FD_TWEEN_LINEAR</a> };</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">// The starting time and the duration</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    Uint32 start_time{ 0 }, duration{ 0 };</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// The source and destination values</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">double</span> start_value{ 0 }, end_value{ 0 };</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// Variables for detecting whether the tween </span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">// has moved since it was last checked</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    Uint32 last_checked{ 0 };</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">bool</span> force_moved{ <span class="keyword">true</span> };</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="comment">// Whether we have declared that the tween has ended</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">bool</span> has_finished{ <span class="keyword">false</span> };</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    Uint32 getProgress();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> linearTween(<span class="keywordtype">double</span> s, <span class="keywordtype">double</span> e, Uint32 t, Uint32 d);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> easeInTween(<span class="keywordtype">double</span> s, <span class="keywordtype">double</span> e, Uint32 t, Uint32 d);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> easeOutTween(<span class="keywordtype">double</span> s, <span class="keywordtype">double</span> e, Uint32 t, Uint32 d);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> elasticTween(<span class="keywordtype">double</span> s, <span class="keywordtype">double</span> e, Uint32 t, Uint32 d);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="class_f_d___tween.html#a7cd16d1d7576e247370d78cfe93b25c4">FD_Tween</a>(<span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a> = 0);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="class_f_d___tween.html#a2a432566fbc31969e2910f7513c0c4ef">~FD_Tween</a>();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_f_d___tween.html#af15b15c19e97d1d646e78832650c55f2">set</a>(<span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a>);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_f_d___tween.html#a810165119ca391d68505e5dd97a600b1">add</a>(<span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a>);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_f_d___tween.html#a6c175c0a5e0d98e4c36abd975ff1f107">move</a>(<a class="code" href="fd__tween_8hpp.html#a81baf2c6896bcef25f938ad03be5c653">FD_TweenType</a> tweenType, <span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#ad972e829c0823b9b48a1d9ba6ec0884b">destination</a>, Uint32 duration, Uint32 pause = 0);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_f_d___tween.html#a0e4957c7c44c36d12fbbc7dff7131bcc">apply</a>(<a class="code" href="struct_f_d___tween_action__.html">FD_TweenAction</a> &amp;action);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#ad972e829c0823b9b48a1d9ba6ec0884b">destination</a>();</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a>();</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_f_d___tween.html#a4228ae4a52dcec7cb33c3b3e074794fa">moved</a>();</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_f_d___tween.html#a2d9abee80a4cbfb40ebd278064397f1b">going</a>(<span class="keywordtype">double</span> <a class="code" href="class_f_d___tween.html#a93fe3b0a90feab8b5e5a85d4d01471bd">value</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_f_d___tween.html#aa7195cf956b842401c21b1a489816723">done</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_f_d___tween.html#a0f06592f317ed5ecfcc3e63767796185">finished</a>();</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;};</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclass_f_d___tween_html_a4228ae4a52dcec7cb33c3b3e074794fa"><div class="ttname"><a href="class_f_d___tween.html#a4228ae4a52dcec7cb33c3b3e074794fa">FD_Tween::moved</a></div><div class="ttdeci">bool moved()</div><div class="ttdoc">Returns whether the tween has moved since it was lasted checked.</div><div class="ttdef"><b>Definition:</b> fd_tween.cpp:68</div></div>
 <div class="ttc" id="aclass_f_d___tween_html_aa7195cf956b842401c21b1a489816723"><div class="ttname"><a href="class_f_d___tween.html#aa7195cf956b842401c21b1a489816723">FD_Tween::done</a></div><div class="ttdeci">bool done() const</div><div class="ttdoc">Returns whether the tween has stopped moving.</div><div class="ttdef"><b>Definition:</b> fd_tween.cpp:80</div></div>
@@ -164,7 +164,7 @@ $(function() {
 <div class="ttc" id="afd__tween_8hpp_html_a81baf2c6896bcef25f938ad03be5c653af2b13f345adf2304ed8f1fbf69d26d4e"><div class="ttname"><a href="fd__tween_8hpp.html#a81baf2c6896bcef25f938ad03be5c653af2b13f345adf2304ed8f1fbf69d26d4e">FD_TWEEN_ELASTIC</a></div><div class="ttdoc">An elastic tween, do not use if you are wary of overshooting (albeit temporarily) the destination.</div><div class="ttdef"><b>Definition:</b> fd_tween.hpp:22</div></div>
 <div class="ttc" id="aclass_f_d___tween_html_a6c175c0a5e0d98e4c36abd975ff1f107"><div class="ttname"><a href="class_f_d___tween.html#a6c175c0a5e0d98e4c36abd975ff1f107">FD_Tween::move</a></div><div class="ttdeci">void move(FD_TweenType tweenType, double destination, Uint32 duration, Uint32 pause=0)</div><div class="ttdoc">Applies a tween.</div><div class="ttdef"><b>Definition:</b> fd_tween.cpp:30</div></div>
 <div class="ttc" id="astruct_f_d___tween_action___html_affaf2290d5ca647d447572d2022acecc"><div class="ttname"><a href="struct_f_d___tween_action__.html#affaf2290d5ca647d447572d2022acecc">FD_TweenAction_::pause_increment</a></div><div class="ttdeci">Uint32 pause_increment</div><div class="ttdoc">The value by which the pause increments when this action is used.</div><div class="ttdef"><b>Definition:</b> fd_tween.hpp:42</div></div>
-<div class="ttc" id="aclass_f_d___tween_html"><div class="ttname"><a href="class_f_d___tween.html">FD_Tween</a></div><div class="ttdef"><b>Definition:</b> fd_tween.hpp:47</div></div>
+<div class="ttc" id="aclass_f_d___tween_html"><div class="ttname"><a href="class_f_d___tween.html">FD_Tween</a></div><div class="ttdoc">The class allowing smooth interpolation between numerical values.</div><div class="ttdef"><b>Definition:</b> fd_tween.hpp:48</div></div>
 <div class="ttc" id="aclass_f_d___tween_html_af15b15c19e97d1d646e78832650c55f2"><div class="ttname"><a href="class_f_d___tween.html#af15b15c19e97d1d646e78832650c55f2">FD_Tween::set</a></div><div class="ttdeci">void set(double value)</div><div class="ttdoc">Sets the value of the tween.</div><div class="ttdef"><b>Definition:</b> fd_tween.cpp:14</div></div>
 <div class="ttc" id="afd__tween_8hpp_html_a81baf2c6896bcef25f938ad03be5c653a0690a4e5023293561a8a61f02b180e10"><div class="ttname"><a href="fd__tween_8hpp.html#a81baf2c6896bcef25f938ad03be5c653a0690a4e5023293561a8a61f02b180e10">FD_TWEEN_EASE_OUT</a></div><div class="ttdoc">An ease out tween.</div><div class="ttdef"><b>Definition:</b> fd_tween.hpp:20</div></div>
 <div class="ttc" id="astruct_f_d___tween_action___html_ab74e912e92b759755744dbda895aee5a"><div class="ttname"><a href="struct_f_d___tween_action__.html#ab74e912e92b759755744dbda895aee5a">FD_TweenAction_::pause</a></div><div class="ttdeci">Uint32 pause</div><div class="ttdoc">The length of time the tween will pause before initiating in milliseconds.</div><div class="ttdef"><b>Definition:</b> fd_tween.hpp:37</div></div>

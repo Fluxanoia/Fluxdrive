@@ -1,8 +1,11 @@
 #ifndef FD_INPUT_MANAGER_H_
 #define FD_INPUT_MANAGER_H_
 
+#include <cmath>
+#include <string>
 #include <memory>
 #include <vector>
+#include <stdlib.h>
 #include <unordered_map>
 
 #include <SDL_events.h>
@@ -24,6 +27,48 @@ typedef struct FD_InputEvent_ {
 	//! The corresponding joystick (if any) to the input.
 	SDL_JoystickID joystick_id;
 } FD_InputEvent;
+
+//! The namespace containing input determining functions
+namespace FD_InputFunctions {
+
+	//! Returns whether a character is blocking.
+	/*!
+		Blocking characters stop the cursor when
+		traversing with the left and right arrows
+		and CTRL is held down.
+
+		\return Whether a character is blocking.
+	*/
+	bool isBlocking(char c);
+	//! Returns whether a character is a space.
+	/*!
+		\return Whether a character is a space.
+	*/
+	bool isSpace(char c);
+	//! Returns whether a character is alphabetical.
+	/*!
+		\return Whether a character is alphabetical.
+	*/
+	bool isAlphabetical(char c);
+	//! Returns whether a character is numerical.
+	/*!
+		\return Whether a character is numerical.
+	*/
+	bool isNumerical(char c);
+	//! Returns whether a character is alphanumerical.
+	/*!
+		\return Whether a character is alphanumerical.
+	*/
+	bool isAlphanumerical(char c);
+
+	//! Checks if a key modifier is held.
+	/*!
+		\param mod The key modifier code to check.
+		\return Whether the given key modifier is held.
+	*/
+	bool modifierHeld(SDL_Keymod mod);
+
+};
 
 //! The FD_InputSet class, creates an individual interface to input for classes.
 class FD_InputSet {
@@ -95,6 +140,13 @@ private:
 	int mouse_y{};
 	std::unordered_map<SDL_JoystickID, std::unordered_map<FD_ControllerAxis, Uint16>> axis_values{ };
 
+	size_t text_caret{ 0 };
+	bool text_select_infront{ };
+	size_t text_select_size{ 0 };
+	std::string text_typed{ };
+	bool text_changed{ false };
+	bool caret_changed{ false };
+
 	bool mouse_moved{ false };
 	std::unordered_map<SDL_JoystickID, std::unordered_map<FD_ControllerAxis, bool>> axis_moved{ };
 
@@ -105,6 +157,8 @@ private:
 
 	void addMap(const FD_MapType t, const std::shared_ptr<FD_Input> input,
 		const int map_code, const Uint16 pause);
+
+	size_t getNewCaretPosition(bool forward, bool ctrl) const;
 
 public:
 
@@ -161,6 +215,51 @@ public:
 		\param id     The ID of the joystick corresponding to the device (if any).
 	*/
 	void updateDevice(FD_Device device, SDL_JoystickID id = 0);
+
+	//! Update the set with the new typed text.
+	/*!
+		\param text The new text.
+	*/
+	void typedText(std::string text);
+	//! Update the set with a backspace.
+	/*!
+		\param ctrl Whether CTRL is held.
+	*/
+	void typedBackspace(bool ctrl);
+	//! Update the set with a movement of the caret.
+	/*!
+		\param forward Whether the caret is moving forward.
+		\param ctrl    Whether CTRL is held.
+		\param shift   Whether SHIFT is held.
+	*/
+	void moveCaret(bool forward, bool ctrl, bool shift);
+	//! Resets the text input's selection.
+	void resetTextSelection();
+	//! Resets the text input with some input text.
+	/*!
+		\param text The text to set the input to.
+	*/
+	void resetTyped(std::string text = "");
+	//! Performs a cut operation on the text of the input set.
+	/*!
+		\param ctrl_check Whether the function should check if CTRL is held.
+	*/
+	void cutText(bool ctrl_check = true);
+	//! Performs a copy operation on the text of the input set.
+	/*!
+		\param ctrl_check Whether the function should check if CTRL is held.
+	*/
+	void copyText(bool ctrl_check = true);
+	//! Performs a paste operation on the text of the input set.
+	/*!
+		\param ctrl_check Whether the function should check if CTRL is held.
+	*/
+	void pasteText(bool ctrl_check = true);
+	//! Selects all text in the input set.
+	/*!
+		\param ctrl_check Whether the function should check if CTRL is held.
+	*/
+	void selectAllText(bool ctrl_check = true);
 
 	//! Adds a joystick axis map to the set.
 	/*!
@@ -280,6 +379,47 @@ public:
 		\return The last joystick used.
 	*/
 	SDL_JoystickID getLastJoystick() const;
+
+	//! Returns the typed text.
+	/*!
+		\return The typed text.
+	*/
+	std::string getTypedText() const;
+	//! Returns the caret position.
+	/*!
+		\return The caret position.
+	*/
+	size_t getCaretPosition() const;
+	//! Returns the size of the current caret selection.
+	/*!
+		\return The size of the current caret selection.
+	*/
+	size_t caretSelectionSize() const;
+	//! Returns the index where the selection starts.
+	/*!
+		\return The index where the selection starts.
+	*/
+	size_t getSelectionStartIndex() const;
+	//! Returns the index where the selection end.
+	/*!
+		\return The index where the selection endss.
+	*/
+	size_t getSelectionEndIndex() const;
+	//! Returns whether the caret is selecting infront of itself.
+	/*!
+		\return Whether the caret is selecting infront of itself.
+	*/
+	bool isCaretSelectingInfront() const;
+	//! Returns whether the text input has changed.
+	/*!
+		\return Whether the text input has changed.
+	*/
+	bool hasTypedTextChanged();
+	//! Returns whether the caret has changed.
+	/*!
+		\return Whether the caret has changed.
+	*/
+	bool hasCaretChanged();
 
 	//! Returns the angle the mouse position makes with the given point in degrees.
 	/*!
@@ -419,6 +559,16 @@ public:
 		\param e The event.
 	*/
 	void pushJoyDeviceEvent(const SDL_JoyDeviceEvent* e);
+	//! Processes a text input event.
+	/*!
+		\param e The event.
+	*/
+	void pushTextInputEvent(const SDL_TextInputEvent* e);
+	//! Processes a text editting event.
+	/*!
+		\param e The event.
+	*/
+	void pushTextEditingEvent(const SDL_TextEditingEvent* e);
 
 	//! Generates a new input set and returns the corresponding ID.
 	/*!

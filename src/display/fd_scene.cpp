@@ -85,6 +85,7 @@ void FD_Scene::writeDisplaySettings() {
 }
 
 void FD_Scene::update() {
+	win->update();
 	if (win->hasUpdated()) writeDisplaySettings();
 	if (groups.find(currentID) != groups.end()) {
 		for (auto og : groups.at(currentID)) {
@@ -112,6 +113,7 @@ bool FD_Scene::renderCompleted() {
 	return true;
 }
 void FD_Scene::render() {
+	SDL_SetRenderDrawColor(win->getRenderer(), 0, 0, 0, 255);
 	SDL_RenderClear(win->getRenderer());
 	// Render the current object list
 	if (groups.find(currentID) != groups.end()) {

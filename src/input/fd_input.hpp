@@ -183,6 +183,9 @@ public:
 	*/
 	virtual FD_Device getDevice() const = 0;
 	//! Returns the joystick ID corresponding to the input.
+	/*!
+		\return The joystick ID corresponding to the input.
+	*/
 	virtual SDL_JoystickID getJoystickID() const = 0;
 
 	//! Serialises the input.

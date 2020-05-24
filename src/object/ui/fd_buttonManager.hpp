@@ -172,10 +172,12 @@ public:
 	void addDefaultMouseMaps();
 	//! Adds the default keyboard mappings.
 	/*!
-		Specifically, this makes the WASD and arrow keys work directionally
+		Specifically, this makes the WASD (optional) and arrow keys work directionally
 		with the enter key for pressing buttons.
+		
+		\param wasd Whether to include WASD in the maps.
 	*/
-	void addDefaultKeyboardMaps();
+	void addDefaultKeyboardMaps(bool wasd = true);
 	//! Adds the default joystick (controller) maps.
 	/*!
 		Specifically, this makes the analog sticks and DPad work directionally

@@ -32,8 +32,6 @@ enum FD_DrawStyle {
 class FD_Line : public FD_Layered, public std::enable_shared_from_this<FD_Line> {
 private:
 
-private:
-
 	SDL_Colour colour;
 	FD_Tween* x1;
 	FD_Tween* y1;
@@ -45,6 +43,9 @@ private:
 
 	SDL_Point* p1{ nullptr };
 	SDL_Point* p2{ nullptr };
+
+	SDL_BlendMode blend_mode{ SDL_BLENDMODE_BLEND };
+	SDL_Rect* clip_rect{ nullptr };
 
 public:
 
@@ -79,6 +80,17 @@ public:
 	*/
 	void removePoints();
 
+	//! Supplies a pointer to a clipping rectangle to the line.
+	/*!
+		\sa removeClipRect
+	*/
+	void supplyClipRect(SDL_Rect* rect);
+	//! Wipes the supplied clipping rectangle.
+	/*!
+		\sa supplyClipRect
+	*/
+	void removeClipRect();
+
 	//! Renders the FD_Line.
 	/*!
 		\param renderer The renderer to be used.
@@ -98,6 +110,11 @@ public:
 		\param visible Whether the line should be visible or not.
 	*/
 	void setVisible(bool visible);
+	//! Sets the blend mode of the line.
+	/*!
+		\param bm The new blend mode.
+	*/
+	void setBlendMode(SDL_BlendMode bm);
 
 	//! Returns the colour of the line.
 	/*!
@@ -109,6 +126,11 @@ public:
 		\return Whether the line is visible or not.
 	*/
 	bool isVisible() const;
+	//! Returns the blend mode of the line.
+	/*!
+		\return The blend mode of the line.
+	*/
+	SDL_BlendMode getBlendMode() const;
 
 	//! Returns the x-coordinate of the first point.
 	/*!
@@ -208,9 +230,12 @@ private:
 
 	SDL_Rect* rect{ nullptr };
 
+	SDL_BlendMode blend_mode{ SDL_BLENDMODE_BLEND };
+	SDL_Rect* clip_rect{ nullptr };
+
 public:
 
-	//! Constructs a FD_Line.
+	//! Constructs a FD_Box.
 	/*!
 		\param x            The x-coordinate of the rectangle.
 		\param y            The y-coordinate of the rectangle.
@@ -240,6 +265,17 @@ public:
 		\sa supplyRect
 	*/
 	void removeRect();
+
+	//! Supplies a pointer to a clipping rectangle to the box.
+	/*!
+		\sa removeClipRect
+	*/
+	void supplyClipRect(SDL_Rect* rect);
+	//! Wipes the supplied clipping rectangle.
+	/*!
+		\sa supplyClipRect
+	*/
+	void removeClipRect();
 
 	//! Renders the FD_Box.
 	/*!
@@ -285,6 +321,11 @@ public:
 		\param visible Whether the box should be visible or not.
 	*/
 	void setVisible(bool visible);
+	//! Sets the blend mode of the box.
+	/*!
+		\param bm The new blend mode.
+	*/
+	void setBlendMode(SDL_BlendMode bm);
 
 	//! Returns the colour of the underlay of the box.
 	/*!
@@ -306,36 +347,29 @@ public:
 		\return Whether the box is visible or not.
 	*/
 	bool isVisible() const;
+	//! Returns the blend mode of the box.
+	/*!
+		\return The blend mode of the box.
+	*/
+	SDL_BlendMode getBlendMode() const;
 
 	//! Returns the x-coordinate of the box.
 	/*!
-		Note that this method does not access the value of the
-		supplied pointer.
-
 		\return The x-coordinate of the box.
 	*/
 	double getX() const;
 	//! Returns the y-coordinate of the box.
 	/*!
-		Note that this method does not access the value of the
-		supplied pointer.
-
 		\return The y-coordinate of the box.
 	*/
 	double getY() const;
 	//! Returns the width of the box.
 	/*!
-		Note that this method does not access the value of the
-		supplied pointer.
-
 		\return The width of the box.
 	*/
 	double getWidth() const;
 	//! Returns the height of the box.
 	/*!
-		Note that this method does not access the value of the
-		supplied pointer.
-
 		\return The height of the box.
 	*/
 	double getHeight() const;
@@ -417,6 +451,8 @@ protected:
 	/*!
 		It is advised that you use updateBounds to some capacity
 		to assign this variable.
+
+		\sa updateBounds
 	*/
 	SDL_Rect* dstrect{ nullptr };
 	//! The tween corresponding to the x-coordinate of the rotational center.
@@ -436,8 +472,12 @@ protected:
 	FD_DrawStyle draw_style{ FD_CENTERED };
 	//! The flip flags of the object.
 	SDL_RendererFlip flip_flags{ SDL_FLIP_NONE };
+	//! The blend mode of the object
+	SDL_BlendMode blend_mode{ SDL_BLENDMODE_BLEND };
+	//! The clipping rectangle of the object
+	SDL_Rect* clip_rect{ nullptr };
 
-	//! This updates the destination rectangle of the object.
+	//! This updates a rectangle with respect to the given parameters.
 	/*!
 		\param rect  The pointer to the rectangle to update.
 		\param x     The x-coordinate of the rectangle.
@@ -448,6 +488,12 @@ protected:
 	*/
 	void updateBounds(SDL_Rect* rect, double x, double y,
 		double w, double h, FD_DrawStyle style);
+
+	//! This updates a rectangle with respect to the objects parameters.
+	/*!
+		\param rect  The pointer to the rectangle to update.
+	*/
+	void updateBounds(SDL_Rect* rect);
 
 public:
 
@@ -567,6 +613,16 @@ public:
 		\return The rendering flipping flags of the object.
 	*/
 	virtual SDL_RendererFlip getFlipFlags() const;
+	//! Returns the blend mode of the object.
+	/*!
+		\return The blend mode of the object.
+	*/
+	virtual SDL_BlendMode getBlendMode() const;
+	//! Returns the clipping rectangle of the object.
+	/*!
+		\return The clipping rectangle of the object.
+	*/
+	virtual SDL_Rect* getClipRect() const;
 	//! Returns the opacity of the object.
 	/*!
 		\return The opacity of the object.

@@ -100,18 +100,24 @@ void FD_ButtonManager::update() {
 			}
 			break;
 		case FD_BUTTON_MOUSE_PRESS:
-			buttons.at(selected)->press();
+			for (auto b : buttons) b->press();
 			break;
 		case FD_BUTTON_MOUSE_RELEASE:
-			button = buttons.at(selected);
-			if (button->release()) events.push_back(button->getCode());
+			for (auto b : buttons) {
+				if (b->release()) {
+					events.push_back(b->getCode());
+				}
+			}
 			break;
 		case FD_BUTTON_OTHER_PRESS:
-			buttons.at(selected)->press();
+			for (auto b : buttons) b->press();
 			break;
 		case FD_BUTTON_OTHER_RELEASE:
-			button = buttons.at(selected);
-			if (button->release()) events.push_back(button->getCode());
+			for (auto b : buttons) {
+				if (b->release()) {
+					events.push_back(b->getCode());
+				}
+			}
 			break;
 		case FD_BUTTON_ENTER:
 			button = buttons.at(selected);
@@ -219,13 +225,15 @@ void FD_ButtonManager::addDefaultMouseMaps() {
 	inputSet->addMouseButtonMap(FD_MAP_PRESSED, SDL_BUTTON_LEFT, FD_BUTTON_MOUSE_PRESS);
 	inputSet->addMouseButtonMap(FD_MAP_RELEASED, SDL_BUTTON_LEFT, FD_BUTTON_MOUSE_RELEASE);
 }
-void FD_ButtonManager::addDefaultKeyboardMaps() {
+void FD_ButtonManager::addDefaultKeyboardMaps(bool wasd) {
 	std::shared_ptr<FD_InputSet> inputSet;
 	FD_Handling::lock(this->inputSet, inputSet, true);
-	inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_w, FD_BUTTON_UP);
-	inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_s, FD_BUTTON_DOWN);
-	inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_a, FD_BUTTON_EXIT);
-	inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_d, FD_BUTTON_ENTER);
+	if (wasd) {
+		inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_w, FD_BUTTON_UP);
+		inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_s, FD_BUTTON_DOWN);
+		inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_a, FD_BUTTON_EXIT);
+		inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_d, FD_BUTTON_ENTER);
+	}
 	inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_UP, FD_BUTTON_UP);
 	inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_DOWN, FD_BUTTON_DOWN);
 	inputSet->addKeyMap(FD_MAP_RELEASED, SDLK_LEFT, FD_BUTTON_EXIT);

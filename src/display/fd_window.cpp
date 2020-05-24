@@ -29,7 +29,10 @@ FD_Window::FD_Window(std::string title, int width, int height,
 	SDL_GetWindowSize(window, &window_width, &window_height);
 	apply();
 }
-FD_Window::~FD_Window() {}
+FD_Window::~FD_Window() {
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+}
 
 void FD_Window::setDefaultHints() {
 	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -48,6 +51,18 @@ void FD_Window::pushEvent(SDL_WindowEvent e) {
 			}
 		}
 		break;
+	}
+}
+
+void FD_Window::update() {
+	// Clear unnecessary pointers from the resizables
+	auto it{ resizeables.begin() };
+	while (it != resizeables.end()) {
+		if ((*it).use_count() == 1) {
+			it = resizeables.erase(it);
+		} else {
+			it++;
+		}
 	}
 }
 

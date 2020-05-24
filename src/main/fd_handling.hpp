@@ -63,7 +63,7 @@ namespace FD_Handling {
 		\sa errorIMG
 		\sa errorTTF
 	*/
-	void error(const char* s = "An error occured.", bool fatal = false);
+	void error(const std::string s = "An error occured.", bool fatal = false);
 
 	//! Prints an error message and; the current SDL error and; can throw FD_HandlingException and terminate execution.
 	/*!
@@ -80,7 +80,7 @@ namespace FD_Handling {
 		\sa errorIMG
 		\sa errorTTF
 	*/
-	void errorSDL(const char* s = "An SDL error occured.", bool fatal = false);
+	void errorSDL(const std::string s = "An SDL error occured.", bool fatal = false);
 
 	//! Prints an error message and; the current SDL_Image error and; can throw FD_HandlingException and terminate execution.
 	/*!
@@ -97,7 +97,7 @@ namespace FD_Handling {
 		\sa errorSDL
 		\sa errorTTF
 	*/
-	void errorIMG(const char* s = "An SDL_image error occured.", bool fatal = false);
+	void errorIMG(const std::string s = "An SDL_image error occured.", bool fatal = false);
 
 	//! Prints an error message and; the current SDL_TTF error and; can throw FD_HandlingException and terminate execution.
 	/*!
@@ -114,7 +114,7 @@ namespace FD_Handling {
 		\sa errorSDL
 		\sa errorIMG
 	*/
-	void errorTTF(const char* s = "An SDL_ttf error occured.", bool fatal = false);
+	void errorTTF(const std::string s = "An SDL_ttf error occured.", bool fatal = false);
 	
 	//! Locks a weak pointer into a given shared pointer
 	/*!
@@ -135,7 +135,7 @@ namespace FD_Handling {
 	*/
 	template <class T>
 	inline bool lock(std::weak_ptr<T> w_ptr, std::shared_ptr<T>& s_ptr,
-		bool print_err = false, bool fatal = true) {
+		bool print_err = true, bool fatal = true) {
 		if (auto temp_s_ptr{ w_ptr.lock() }) {
 			s_ptr = temp_s_ptr;
 			return true;
@@ -153,7 +153,7 @@ namespace FD_Handling {
 
 		\param s A debug message.
 	*/
-	void debug(const char* s = "");
+	void debug(const std::string s = "");
 
 	//! Prints a large debug message if FD_DEBUG is defined
 	/*

@@ -1,11 +1,36 @@
 #include "fd_inputManager.hpp"
 
-#include <cmath>
-#include <string>
-
 #include "fd_input.hpp"
 #include "../maths/fd_maths.hpp"
 #include "../main/fd_handling.hpp"
+
+// Input Functions 
+
+// Checks if a character is blocking
+bool FD_InputFunctions::isBlocking(char c) {
+	return !isAlphanumerical(c);
+}
+// Checks if a character is whitespace
+bool FD_InputFunctions::isSpace(char c) {
+	return (c == ' ');
+}
+// Checks if a character is alphabetical
+bool FD_InputFunctions::isAlphabetical(char c) {
+	return ((c >= 'a') && (c <= 'z'))
+		|| ((c >= 'A') && (c <= 'Z'));
+}
+// Checks if a character is numerical
+bool FD_InputFunctions::isNumerical(char c) {
+	return (c >= '0') && (c <= '9');
+}
+// Checks if a character is alphanumerical
+bool FD_InputFunctions::isAlphanumerical(char c) {
+	return isAlphabetical(c) || isNumerical(c);
+}
+
+bool FD_InputFunctions::modifierHeld(SDL_Keymod mod) {
+	return (SDL_GetModState() & mod);
+}
 
 // Input Manager Member Functions
 
@@ -54,6 +79,25 @@ void FD_InputManager::pushKeyboardEvent(const SDL_KeyboardEvent* e) {
 	std::shared_ptr<FD_KeyInput> i = std::make_shared<FD_KeyInput>(e->keysym.sym);
 	switch (e->type) {
 	case SDL_KEYDOWN:
+		// Check for typing events
+		if (auto set = getInputSet().lock()) {
+			switch (e->keysym.sym) {
+			case SDLK_BACKSPACE:
+				set->typedBackspace(e->keysym.mod & KMOD_LCTRL);
+				break;
+			case SDLK_LEFT:
+				set->moveCaret(false,
+					e->keysym.mod & KMOD_LCTRL,
+					e->keysym.mod & KMOD_SHIFT);
+				break;
+			case SDLK_RIGHT:
+				set->moveCaret(true,
+					e->keysym.mod & KMOD_LCTRL,
+					e->keysym.mod & KMOD_SHIFT);
+				break;
+			}
+		}
+		// 
 		if (!isHeld(i)) {
 			pressed.insert(pressed.begin(), i);
 			this->addHeldInput(i);
@@ -253,6 +297,11 @@ void FD_InputManager::pushJoyDeviceEvent(const SDL_JoyDeviceEvent* e) {
 	}
 }
 
+void FD_InputManager::pushTextInputEvent(const SDL_TextInputEvent* e) {
+	if (auto set = getInputSet().lock()) set->typedText(e->text);
+}
+void FD_InputManager::pushTextEditingEvent(const SDL_TextEditingEvent* e) { }
+
 void FD_InputManager::setInputSet(const int id) {
 	// Check the id bounds
 	if (id <= 0) return;
@@ -446,6 +495,204 @@ void FD_InputSet::updateDevice(FD_Device device, SDL_JoystickID id) {
 	for (std::shared_ptr<FD_InputSet> set : shared_sets) set->updateDevice(lastDevice, lastJoystick);
 }
 
+void FD_InputSet::typedText(std::string text) {
+	if (text_select_size > 0) this->typedBackspace(false);
+	text_typed.insert(text_caret, text);
+	text_caret += text.size();
+	text_changed = true;
+	for (std::shared_ptr<FD_InputSet> set : shared_sets) {
+		set->typedText(text);
+	}
+}
+
+size_t FD_InputSet::getNewCaretPosition(bool forward, bool ctrl) const {
+	size_t new_pos{ text_caret };
+	if (ctrl) {
+		if (!forward) new_pos--;
+		bool blocked;
+		bool streak_is_blocked{
+			FD_InputFunctions::isBlocking(text_typed.at(new_pos))
+		};
+		int jump{ (forward) ? 1 : -1 };
+		new_pos += jump;
+		while (new_pos >= 0 && new_pos < text_typed.size()
+			|| new_pos == 0 && forward) {
+			blocked = FD_InputFunctions::isBlocking(text_typed.at(new_pos));
+			if (!(blocked == streak_is_blocked)) break;
+			new_pos += jump;
+		}
+		if (!forward) new_pos++;
+	} else {
+		if (!forward && new_pos != 0) new_pos--;
+		if (forward && new_pos != text_typed.size()) new_pos++;
+	}
+	return new_pos;
+}
+void FD_InputSet::typedBackspace(bool ctrl) {
+	if (text_select_size > 0) {
+		int pos{ static_cast<int>(this->getCaretPosition()) };
+		const int sel_size{ static_cast<int>(this->caretSelectionSize()) };
+		if (!text_select_infront) {
+			pos -= sel_size;
+		}
+		for (int i{ 0 }; i < sel_size; i++) {
+			text_typed.erase(text_typed.begin() + pos);
+		}
+		if (!text_select_infront) text_caret -= text_select_size;
+		text_select_size = 0;
+		text_changed = true;
+	} else if (text_caret > 0) {
+		size_t new_pos{ this->getNewCaretPosition(false, ctrl) };
+		while (text_caret > new_pos) {
+			text_caret--;
+			text_typed.erase(text_typed.begin() + text_caret);
+		}
+		text_changed = true;
+	}
+	for (std::shared_ptr<FD_InputSet> set : shared_sets) {
+		set->typedBackspace(ctrl);
+	}
+}
+void FD_InputSet::moveCaret(bool forward, bool ctrl, bool shift) {
+	bool moved_forward{ false };
+	bool moved_backward{ false };
+	if (forward && text_caret < text_typed.size()) moved_forward = true;
+	if (!forward && text_caret > 0) moved_backward = true;
+	int sel_size{ static_cast<int>(text_select_size) };
+	if (!shift) {
+		if (moved_forward ^ moved_backward && sel_size > 0) {
+			if (moved_forward) {
+				if (text_select_infront) text_caret = getSelectionEndIndex();
+				moved_forward = false;
+			} else if (moved_backward) {
+				if (!text_select_infront) text_caret = getSelectionStartIndex();
+				moved_backward = false;
+			}
+		}
+		text_changed |= sel_size != 0;
+		sel_size = 0;
+	}
+	if (moved_forward ^ moved_backward) {
+		size_t new_pos{ this->getNewCaretPosition(moved_forward, ctrl) };
+		int delta{ static_cast<int>(text_caret - new_pos) };
+		if (delta < 0) delta *= -1;
+		if (shift) {
+			if (sel_size == 0) {
+				sel_size = delta;
+				text_select_infront = moved_backward;
+			} else {
+				if (text_select_infront) {
+					if (moved_forward) {
+						sel_size -= delta;
+						if (sel_size < 0) {
+							sel_size *= -1;
+							text_select_infront = false;
+						}
+					}
+					if (moved_backward) {
+						sel_size += delta;
+					}
+				} else {
+					if (moved_forward) {
+						sel_size += delta;
+					}
+					if (moved_backward) {
+						sel_size -= delta;
+						if (sel_size < 0) {
+							sel_size *= -1;
+							text_select_infront = true;
+						}
+					}
+				}
+			}
+		}
+		text_caret = new_pos;
+	}
+	text_changed |= (sel_size != text_select_size);
+	text_select_size = sel_size;
+	caret_changed |= moved_forward;
+	caret_changed |= moved_backward;
+	for (std::shared_ptr<FD_InputSet> set : shared_sets) {
+		set->moveCaret(forward, ctrl, shift);
+	}
+}
+void FD_InputSet::resetTyped(std::string text) {
+	text_select_size = 0;
+	text_caret = text.size();
+	text_typed = text;
+	text_changed = true;
+}
+void FD_InputSet::resetTextSelection() {
+	text_select_size = 0;
+	text_changed = true;
+}
+
+size_t FD_InputSet::getSelectionStartIndex() const {
+	if (text_select_size == 0) return text_typed.size();
+	size_t caret_pos{ text_caret };
+	if (!text_select_infront) caret_pos -= text_select_size;
+	return caret_pos;
+}
+size_t FD_InputSet::getSelectionEndIndex() const {
+	if (text_select_size == 0) return text_typed.size();
+	size_t caret_pos{ text_caret };
+	if (text_select_infront) caret_pos += text_select_size;
+	return caret_pos;
+}
+
+void FD_InputSet::cutText(bool cc) {
+	if (cc && !FD_InputFunctions::modifierHeld(KMOD_LCTRL)
+		&& !FD_InputFunctions::modifierHeld(KMOD_RCTRL)) {
+		return;
+	}
+	if (text_select_size > 0) {
+		this->copyText();
+		this->typedBackspace(false);
+	}
+}
+void FD_InputSet::copyText(bool cc) {
+	if (cc && !FD_InputFunctions::modifierHeld(KMOD_LCTRL)
+		&& !FD_InputFunctions::modifierHeld(KMOD_RCTRL)) {
+		return;
+	}
+	if (text_select_size < 0) return;
+	std::string sel{ };
+	int pos{ static_cast<int>(text_caret) };
+	if (!text_select_infront) {
+		pos -= static_cast<int>(text_select_size);
+	}
+	for (size_t i{ 0 }; i < text_select_size; i++) {
+		sel.push_back(text_typed.at(pos + i));
+	}
+	SDL_SetClipboardText(sel.c_str());
+}
+void FD_InputSet::pasteText(bool cc) {
+	if (cc && !FD_InputFunctions::modifierHeld(KMOD_LCTRL)
+		&& !FD_InputFunctions::modifierHeld(KMOD_RCTRL)) {
+		return;
+	}
+	if (SDL_HasClipboardText()) {
+		if (text_select_size > 0) this->typedBackspace(false);
+		char* clipboard{ SDL_GetClipboardText() };
+		if (clipboard == nullptr) {
+			FD_Handling::errorSDL("Clipboard text could not be grabbed.");
+		} else {
+			this->typedText(std::string(clipboard));
+			SDL_free(clipboard);
+		}
+	}
+}
+void FD_InputSet::selectAllText(bool cc) {
+	if (cc && !FD_InputFunctions::modifierHeld(KMOD_LCTRL)
+		&& !FD_InputFunctions::modifierHeld(KMOD_RCTRL)) {
+		return;
+	}
+	text_select_infront = false;
+	text_caret = text_typed.size();
+	text_select_size = text_typed.size();
+	text_changed = true;
+}
+
 void FD_InputSet::addMap
 (const FD_MapType t, const std::shared_ptr<FD_Input> input,
 	const int map_code, const Uint16 pause) {
@@ -538,6 +785,34 @@ SDL_JoystickID FD_InputSet::getLastJoystick() const {
 	return lastJoystick;
 }
 
+std::string FD_InputSet::getTypedText() const {
+	return text_typed;
+}
+size_t FD_InputSet::getCaretPosition() const {
+	return text_caret;
+}
+size_t FD_InputSet::caretSelectionSize() const {
+	return text_select_size;
+}
+bool FD_InputSet::isCaretSelectingInfront() const {
+	return text_select_infront;
+}
+bool FD_InputSet::hasTypedTextChanged() {
+	if (text_changed) {
+		text_changed = false;
+		caret_changed = false;
+		return true;
+	}
+	return false;
+}
+bool FD_InputSet::hasCaretChanged() {
+	if (caret_changed) {
+		caret_changed = false;
+		return true;
+	}
+	return false;
+}
+
 double FD_InputSet::getAngle(int x, int y) const {
 	return atan2(mouse_y - y, mouse_x - x);
 }
@@ -583,7 +858,7 @@ double FD_InputSet::getAngle(SDL_JoystickID id, FD_ControllerAxis axis) const {
 			if (axis_values.at(id).find(FD_RIGHT_Y_UP) == axis_values.at(id).end()) {
 				ryu = axis_values.at(id).at(FD_RIGHT_Y_UP);
 			}
-			y = ryd - ryu; 
+			y = ryd - ryu;
 			break;
 		}
 	}

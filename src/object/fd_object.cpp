@@ -34,13 +34,12 @@ FD_Object::~FD_Object() {
 
 void FD_Object::render(SDL_Renderer* renderer, const Uint8 alpha,
 	const std::shared_ptr<const FD_Camera> camera) const {
-	std::shared_ptr<FD_Image> image = getImage();
-	if (image == nullptr) return;
-	Uint8 opacity = getOpacity();
+	std::shared_ptr<FD_Image> image{ getImage() };
+	Uint8 opacity{ getOpacity() };
 	if (alpha == 0) {
 		opacity = 0;
 	} else if (alpha != 255) {
-		opacity = static_cast<Uint8>((alpha / 255.0) * getOpacity());
+		opacity = static_cast<Uint8>((alpha / 255.0) * opacity);
 	}
 	SDL_Rect dr{ };
 	dr.x = getDestinationRect()->x;
@@ -52,9 +51,14 @@ void FD_Object::render(SDL_Renderer* renderer, const Uint8 alpha,
 		if (!camera->manipulate(dr, angle)) return;
 	}
 	image->render(renderer, opacity, getSourceRect(), &dr,
-		angle, getCenterX(), getCenterY(), getFlipFlags());
+		angle, getCenterX(), getCenterY(), getFlipFlags(), 
+		getBlendMode(), getClipRect());
 }
 
+void FD_Object::updateBounds(SDL_Rect* rect) {
+	this->updateBounds(rect, this->x->value(), this->y->value(),
+		this->w->value(), this->h->value(), draw_style);
+}
 void FD_Object::updateBounds(SDL_Rect* rect, double x, double y,
 	double w, double h, FD_DrawStyle style) {
 	if (rect == nullptr) {
@@ -117,6 +121,8 @@ double FD_Object::getAngle() const { return angle->value(); }
 double FD_Object::getCenterX() const { return center_x->value(); };
 double FD_Object::getCenterY() const { return center_y->value(); };
 SDL_RendererFlip FD_Object::getFlipFlags() const { return flip_flags; }
+SDL_BlendMode FD_Object::getBlendMode() const { return blend_mode;  }
+SDL_Rect* FD_Object::getClipRect() const { return clip_rect; }
 Uint8 FD_Object::getOpacity() const {
 	double v = opacity->value();
 	if (v > 255) return 255;
@@ -152,10 +158,19 @@ void FD_Line::supplyPoints(SDL_Point* p1, SDL_Point* p2) {
 	this->p2 = p2;
 }
 
+void FD_Line::supplyClipRect(SDL_Rect* rect) {
+	this->clip_rect = rect;
+}
+void FD_Line::removeClipRect() {
+	this->clip_rect = nullptr;
+}
+
 void FD_Line::render(SDL_Renderer* renderer, const Uint8 alpha,
 	const std::shared_ptr<const FD_Camera> camera) const {
 	if (alpha == 0 || !visible) return;
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_BlendMode old_blend{ };
+	SDL_GetRenderDrawBlendMode(renderer, &old_blend);
+	SDL_SetRenderDrawBlendMode(renderer, blend_mode);
 	Uint8 colour_alpha = colour.a;
 	if (alpha != 255) {
 		colour_alpha = static_cast<Uint8>(colour.a * (alpha / 255.0)
@@ -190,12 +205,20 @@ void FD_Line::render(SDL_Renderer* renderer, const Uint8 alpha,
 		double angle;
 		if (!camera->manipulate(dr, angle)) return;
 	}
+	SDL_Rect* old_clip{ nullptr };
+	bool clipping{ clip_rect != nullptr };
+	if (clipping) {
+		SDL_RenderGetClipRect(renderer, old_clip);
+		SDL_RenderSetClipRect(renderer, clip_rect);
+	}
 	SDL_RenderDrawLine(renderer, dr.x, dr.y, dr.x + dr.w, dr.y + dr.h);
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+	if (clipping) SDL_RenderSetClipRect(renderer, old_clip);
+	SDL_SetRenderDrawBlendMode(renderer, old_blend);
 }
 
 void FD_Line::setColour(SDL_Colour colour) { this->colour = colour; }
 void FD_Line::setVisible(bool visible) { this->visible = visible; }
+void FD_Line::setBlendMode(SDL_BlendMode bm) { this->blend_mode = bm; }
 
 SDL_Colour FD_Line::getColour() const { return colour; }
 bool FD_Line::isVisible() const { return visible; }
@@ -207,6 +230,7 @@ double FD_Line::getY2() const { return y2->value(); }
 Uint8 FD_Line::getOpacity() const {
 	return static_cast<int>(opacity->value());
 }
+SDL_BlendMode FD_Line::getBlendMode() const { return blend_mode; }
 
 void FD_Line::updatePoints(double x1, double y1, double x2, double y2) {
 	this->x1->set(x1);
@@ -251,6 +275,13 @@ void FD_Box::supplyRect(SDL_Rect* rect) {
 	this->rect = rect;
 }
 
+void FD_Box::supplyClipRect(SDL_Rect* rect) {
+	this->clip_rect = rect;
+}
+void FD_Box::removeClipRect() {
+	this->clip_rect = nullptr;
+}
+
 void FD_Box::render(SDL_Renderer* renderer, const Uint8 alpha,
 	const std::shared_ptr<const FD_Camera> camera) const {
 	if (alpha == 0 || !visible) return;
@@ -273,7 +304,16 @@ void FD_Box::render(SDL_Renderer* renderer, const Uint8 alpha,
 		double angle;
 		if (!camera->manipulate(dr, angle)) return;
 	}
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_Rect* old_clip{ nullptr };
+	bool clipping{ clip_rect != nullptr };
+	if (clipping) {
+		SDL_RenderGetClipRect(renderer, old_clip);
+		SDL_RenderSetClipRect(renderer, clip_rect);
+	}
+	SDL_BlendMode old_blend{ };
+	SDL_GetRenderDrawBlendMode(renderer, &old_blend);
+	SDL_SetRenderDrawBlendMode(renderer, blend_mode);
+
 	SDL_SetRenderDrawColor(renderer, underlay_colour.r,
 		underlay_colour.g, underlay_colour.b, underlay_alpha);
 	SDL_RenderFillRect(renderer, &dr);
@@ -282,7 +322,9 @@ void FD_Box::render(SDL_Renderer* renderer, const Uint8 alpha,
 	SDL_SetRenderDrawColor(renderer, overlay_colour.r,
 		overlay_colour.g, overlay_colour.b, overlay_alpha);
 	SDL_RenderFillRect(renderer, &dr);
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+
+	if (clipping) SDL_RenderSetClipRect(renderer, old_clip);
+	SDL_SetRenderDrawBlendMode(renderer, old_blend);
 }
 
 void FD_Box::setUnderlayColour(SDL_Colour colour) { this->underlay_colour = colour; }
@@ -294,6 +336,9 @@ SDL_Colour FD_Box::getUnderlayColour() const { return underlay_colour; }
 SDL_Colour FD_Box::getColour() const { return colour; }
 SDL_Colour FD_Box::getOverlayColour() const { return overlay_colour; }
 bool FD_Box::isVisible() const { return visible; }
+void FD_Box::setBlendMode(SDL_BlendMode bm) {
+	this->blend_mode = bm;
+}
 
 double FD_Box::getX() const { return x->value(); }
 double FD_Box::getY() const { return y->value(); }
@@ -301,6 +346,9 @@ double FD_Box::getWidth() const { return w->value(); }
 double FD_Box::getHeight() const { return h->value(); }
 Uint8 FD_Box::getOpacity() const {
 	return static_cast<int>(opacity->value());
+}
+SDL_BlendMode FD_Box::getBlendMode() const {
+	return blend_mode;
 }
 
 void FD_Box::updateRect(double x, double y, double w, double h) {

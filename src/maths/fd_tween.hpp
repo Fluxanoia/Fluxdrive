@@ -44,6 +44,7 @@ typedef struct FD_TweenAction_ {
 	int uses{ 0 };
 } FD_TweenAction;
 
+//! The class allowing smooth interpolation between numerical values.
 class FD_Tween {
 private:
 

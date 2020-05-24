@@ -55,6 +55,8 @@ bool FD_Main::initialise() {
 		return false;
 	}
 	FD_Handling::debug("SDL_TTF initialised...");
+	SDL_StartTextInput();
+	FD_Handling::debug("TextInput initialised...");
 	return true;
 }
 
@@ -66,6 +68,7 @@ void FD_Main::test() {
 
 void FD_Main::close() {
 	FD_Handling::debug("Deallocating memory...");
+	SDL_StopTextInput();
 	TTF_Quit();
 	Mix_Quit();
 	Mix_CloseAudio();

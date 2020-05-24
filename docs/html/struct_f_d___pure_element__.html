@@ -95,12 +95,15 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a416fb26cc58c396e5158cec78cdc16a7"><td class="memItemLeft" align="right" valign="top">SDL_Point *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_d___pure_element__.html#a416fb26cc58c396e5158cec78cdc16a7">center</a> { nullptr }</td></tr>
 <tr class="memdesc:a416fb26cc58c396e5158cec78cdc16a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The center of the element, relative to the top left.  <a href="struct_f_d___pure_element__.html#a416fb26cc58c396e5158cec78cdc16a7">More...</a><br /></td></tr>
 <tr class="separator:a416fb26cc58c396e5158cec78cdc16a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3693558407208d1d9d4f60662f175ac0"><td class="memItemLeft" align="right" valign="top">SDL_RendererFlip&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_d___pure_element__.html#a3693558407208d1d9d4f60662f175ac0">flags</a></td></tr>
+<tr class="memitem:a3693558407208d1d9d4f60662f175ac0"><td class="memItemLeft" align="right" valign="top">SDL_RendererFlip&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_d___pure_element__.html#a3693558407208d1d9d4f60662f175ac0">flags</a> { SDL_FLIP_NONE }</td></tr>
 <tr class="memdesc:a3693558407208d1d9d4f60662f175ac0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The flipping flags of the element.  <a href="struct_f_d___pure_element__.html#a3693558407208d1d9d4f60662f175ac0">More...</a><br /></td></tr>
 <tr class="separator:a3693558407208d1d9d4f60662f175ac0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26148531f8235dc76194a8ceafb693fc"><td class="memItemLeft" align="right" valign="top">SDL_BlendMode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_d___pure_element__.html#a26148531f8235dc76194a8ceafb693fc">blend_mode</a> { SDL_BLENDMODE_BLEND }</td></tr>
 <tr class="memdesc:a26148531f8235dc76194a8ceafb693fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The blend mode.  <a href="struct_f_d___pure_element__.html#a26148531f8235dc76194a8ceafb693fc">More...</a><br /></td></tr>
 <tr class="separator:a26148531f8235dc76194a8ceafb693fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e6bbedf1da56f1e25132e4f1482462b"><td class="memItemLeft" align="right" valign="top">SDL_Rect *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_d___pure_element__.html#a5e6bbedf1da56f1e25132e4f1482462b">clip</a> { nullptr }</td></tr>
+<tr class="memdesc:a5e6bbedf1da56f1e25132e4f1482462b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clip rectangle.  <a href="struct_f_d___pure_element__.html#a5e6bbedf1da56f1e25132e4f1482462b">More...</a><br /></td></tr>
+<tr class="separator:a5e6bbedf1da56f1e25132e4f1482462b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This allows the <a class="el" href="class_f_d___pure_image.html" title="The FD_PureImage class, specialises the image for custom renderered texture.">FD_PureImage</a> to re-draw itself by storing the components seperately. </p>
@@ -153,6 +156,22 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5e6bbedf1da56f1e25132e4f1482462b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e6bbedf1da56f1e25132e4f1482462b">&#9670;&nbsp;</a></span>clip</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SDL_Rect* FD_PureElement_::clip { nullptr }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The clip rectangle. </p>
+
+</div>
+</div>
 <a id="a32dc1c78a02c1f7faa014f4bf7fa2203"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a32dc1c78a02c1f7faa014f4bf7fa2203">&#9670;&nbsp;</a></span>dstrect</h2>
 
@@ -176,7 +195,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">SDL_RendererFlip FD_PureElement_::flags</td>
+          <td class="memname">SDL_RendererFlip FD_PureElement_::flags { SDL_FLIP_NONE }</td>
         </tr>
       </table>
 </div><div class="memdoc">

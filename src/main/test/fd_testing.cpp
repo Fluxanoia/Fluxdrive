@@ -35,7 +35,7 @@ void FD_Testing::test() {
 	std::shared_ptr<FD_CameraTestState> camera_test{ std::make_shared<FD_CameraTestState>(scene) };
 	std::shared_ptr<FD_EventTestState> event_test{ std::make_shared<FD_EventTestState>(scene) };
 	std::shared_ptr<FD_AudioTestState> audio_test{ std::make_shared<FD_AudioTestState>(scene) };
-	std::shared_ptr<FD_TemporaryTestState> temp_test{ std::make_shared<FD_TemporaryTestState>(scene) };
+	std::shared_ptr<FD_TypingState> temp_test{ std::make_shared<FD_TypingState>(scene) };
 	state_manager->logState(choice_test);
 	state_manager->logState(camera_test);
 	state_manager->logState(event_test);
@@ -125,7 +125,7 @@ void FD_Testing::FD_TestChoiceState::update() {
 		}
 	}
 	background->update();
-button_manager->update();
+	button_manager->update();
 }
 
 void FD_Testing::FD_TestChoiceState::resized(int w, int h) {
@@ -541,80 +541,91 @@ void FD_Testing::FD_AudioTestState::resized(int w, int h) {
 	}
 }
 
-// Temporary Test State Member Functions
+// Typing State Member Functions
 
-FD_Testing::FD_TemporaryTestState::FD_TemporaryTestState(std::weak_ptr<FD_Scene> s)
+FD_Testing::FD_TypingState::FD_TypingState(std::weak_ptr<FD_Scene> s)
 	: FD_State(FD_TEST_EVENT_STATE, s) {
 	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(s, scene, true);
 	// Create the group and camera set
 	cameras = std::make_shared<FD_CameraSet>(scene->getWindow());
 	camera = cameras->addCamera(1920);
+	// Create the button manager
+	bm = new FD_ButtonManager(scene, cameras, input_list);
+	bm->addDefaultMouseMaps();
 	// Add background
 	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
 	std::shared_ptr<FD_FileImage> bg_image;
 	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND), bg_image, true);
 	background = std::make_shared<FD_Element>(bg_image,
 		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
-	for (int i = 0; i < 8; i++) {
-		std::shared_ptr<FD_ObjectGroup> group = std::make_shared<FD_ObjectGroup>(object_list);
-		groups.push_back(group);
-		group->setCameraSet(cameras);
-		scene->addObjectGroup(group);
-
-		std::shared_ptr<FD_Element> element = std::make_shared<FD_Element>(bg_image,
-			50, 50 + i * 60, 0, 10, 0.05, 0.05, false, FD_TOP_LEFT);
-		elements.push_back(element);
-		element->assimilate(group);
-	}
-	// Assimilate background
-	background->assimilate(groups.front());
-	// Grab the font
-	SDL_Color colour = { 255, 255, 255, 255 };
-	FD_Handling::lock(im->loadFont(FD_FONT, 32), font, true);
-	// Add alert
-	alert = std::make_shared<FD_Text>(
-		scene->getWindow()->getRenderer(), font,
-		"Current code is set to ", "0", "!", colour, 
-		0, 0, FD_CENTERED, 10, true);
-	alert->assimilate(groups.front());
+	group = std::make_shared<FD_ObjectGroup>(object_list);
+	group->setCameraSet(cameras);
+	scene->addObjectGroup(group);
+	background->assimilate(group);
+	// Add buttons
+	std::shared_ptr<FD_Font> def_font;
+	SDL_Colour font_colour = { 255, 255, 255, 255 };
+	SDL_Colour sel_colour = { 120, 120, 240, 255 };
+	SDL_Colour sel_text_colour = { 0, 0, 0, 255 };
+	FD_ButtonTemplate temp{ s, group, 10, true };
+	temp.background = im->loadImage(FD_IMAGE_BUTTON);
+	FD_Handling::lock(im->loadFont(FD_FONT, 64), def_font, true);
+	FD_TextTemplate type_temp{ 
+		def_font, font_colour, sel_colour, sel_text_colour,
+		600, 300, false
+	};
+	//
+	std::shared_ptr<FD_TextField> tf{
+		std::make_shared<FD_TextField>(
+			temp, type_temp, input_list, 0, 0, 0, 25, 40, 25, 40)
+	};
+	bm->addButton(group, tf);
+	fields.push_back(tf);
+	//
+	type_temp.box_height = 100;
+	type_temp.horz_scroll = true;
+	std::shared_ptr<FD_TextField> htf{
+		std::make_shared<FD_TextField>(
+			temp, type_temp, input_list, 0, -400, 1, 25, 40, 25, 40)
+	};
+	bm->addButton(group, htf);
+	fields.push_back(htf);
 	// Get the input
 	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
 		input, true);
 	input->addKeyMap(FD_MAP_RELEASED, SDLK_ESCAPE, BACK);
-	input->addKeyMap(FD_MAP_RELEASED, SDLK_w, SWITCH);
 }
-FD_Testing::FD_TemporaryTestState::~FD_TemporaryTestState() {  }
+FD_Testing::FD_TypingState::~FD_TypingState() { 
+	delete bm;
+}
 
-void FD_Testing::FD_TemporaryTestState::wake() {
+void FD_Testing::FD_TypingState::wake() {
 	FD_State::wake();
+	for (auto t : fields) t->wake();
 }
 
-void FD_Testing::FD_TemporaryTestState::sleep() { }
+void FD_Testing::FD_TypingState::sleep() { 
+	bm->reset();
+}
 
-void FD_Testing::FD_TemporaryTestState::update() {
+void FD_Testing::FD_TypingState::update() {
 	FD_InputEvent e;
 	while (input->getEvent(e)) {
 		switch (e.code) {
 		case BACK:
+			FD_Handling::debug_alert();
 			nextState = FD_TEST_CHOICE_STATE;
-			break;
-		case SWITCH:
-			forefront_index++;
-			if (forefront_index == groups.size()) forefront_index = 0;
-			alert->changeText(std::to_string(forefront_index));
-			for (size_t i = 0; i < groups.size(); i++) {
-				Uint8 end{ 40 };
-				if (i == forefront_index) end = 255;
-				groups.at(i)->getTweenOpacity()->move(FD_TWEEN_EASE_IN, end, 1000);
-			}
 			break;
 		}
 	}
 	background->update();
+	int i;
+	while (bm->getEvent(i)) {}
+	bm->update();
 }
 
-void FD_Testing::FD_TemporaryTestState::resized(int w, int h) {
+void FD_Testing::FD_TypingState::resized(int w, int h) {
 	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(this->scene, scene, true);
 	if (background->getWidth() > background->getHeight()) {

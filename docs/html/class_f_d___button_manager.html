@@ -119,9 +119,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9e0b8b22c4c25d73677f820b9af3b9aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button_manager.html#a9e0b8b22c4c25d73677f820b9af3b9aa">addDefaultMouseMaps</a> ()</td></tr>
 <tr class="memdesc:a9e0b8b22c4c25d73677f820b9af3b9aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the default mouse mappings.  <a href="class_f_d___button_manager.html#a9e0b8b22c4c25d73677f820b9af3b9aa">More...</a><br /></td></tr>
 <tr class="separator:a9e0b8b22c4c25d73677f820b9af3b9aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae714b89422a7edad173eb6881e800e0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button_manager.html#ae714b89422a7edad173eb6881e800e0b">addDefaultKeyboardMaps</a> ()</td></tr>
-<tr class="memdesc:ae714b89422a7edad173eb6881e800e0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the default keyboard mappings.  <a href="class_f_d___button_manager.html#ae714b89422a7edad173eb6881e800e0b">More...</a><br /></td></tr>
-<tr class="separator:ae714b89422a7edad173eb6881e800e0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f9dd97559e343737df29f5b9481782"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button_manager.html#a75f9dd97559e343737df29f5b9481782">addDefaultKeyboardMaps</a> (bool wasd=true)</td></tr>
+<tr class="memdesc:a75f9dd97559e343737df29f5b9481782"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the default keyboard mappings.  <a href="class_f_d___button_manager.html#a75f9dd97559e343737df29f5b9481782">More...</a><br /></td></tr>
+<tr class="separator:a75f9dd97559e343737df29f5b9481782"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72b7302d8cbc3d1eb9c6764205102446"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button_manager.html#a72b7302d8cbc3d1eb9c6764205102446">addDefaultJoystickMaps</a> ()</td></tr>
 <tr class="memdesc:a72b7302d8cbc3d1eb9c6764205102446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the default joystick (controller) maps.  <a href="class_f_d___button_manager.html#a72b7302d8cbc3d1eb9c6764205102446">More...</a><br /></td></tr>
 <tr class="separator:a72b7302d8cbc3d1eb9c6764205102446"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -337,8 +337,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae714b89422a7edad173eb6881e800e0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae714b89422a7edad173eb6881e800e0b">&#9670;&nbsp;</a></span>addDefaultKeyboardMaps()</h2>
+<a id="a75f9dd97559e343737df29f5b9481782"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75f9dd97559e343737df29f5b9481782">&#9670;&nbsp;</a></span>addDefaultKeyboardMaps()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -346,14 +346,21 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void FD_ButtonManager::addDefaultKeyboardMaps </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>wasd</em> = <code>true</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Adds the default keyboard mappings. </p>
-<p>Specifically, this makes the WASD and arrow keys work directionally with the enter key for pressing buttons. </p>
+<p>Specifically, this makes the WASD (optional) and arrow keys work directionally with the enter key for pressing buttons.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">wasd</td><td>Whether to include WASD in the maps. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

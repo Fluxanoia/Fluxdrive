@@ -90,7 +90,7 @@ protected:
 	//! The scene used by the button.
 	std::weak_ptr<FD_Scene> scene;
 	//! The image of the button.
-	std::weak_ptr<FD_Image> image{};
+	std::weak_ptr<FD_Image> image;
 	//! The SFX played when the button is hovered over.
 	std::weak_ptr<FD_SFX> sfx_hover{ std::weak_ptr<FD_SFX>() };
 	//! The SFX played when the button is pressed.
@@ -102,11 +102,6 @@ protected:
 	int return_code;
 	//! Whether the button is selected (hovered over) or not.
 	bool selected{ false };
-	//! Whether the button has recently been held (since it was last checked).
-	/*!
-		\warning It is the derived class' responsibility to reset this value when used.
-	*/
-	bool newly_held{ false };
 	//! Whether the button is held down or not.
 	bool held{ false };
 	//! Whether the button has been entered or not.
@@ -114,6 +109,9 @@ protected:
 		\sa FD_BUTTON_ENTER
 	*/
 	bool entered{ false };
+
+	//! Updates the overlay colour of the button.
+	virtual void updateColour();
 
 public:
 
@@ -218,10 +216,14 @@ public:
 class FD_BasicButton : public FD_Button, public std::enable_shared_from_this<FD_BasicButton> {
 private:
 
+	FD_PureElement* pe_fore;
+	FD_PureElement* pe_back;
 	std::shared_ptr<FD_PureImage> pure_image;
 
 	SDL_Rect* back_dstrect{ nullptr };
 	SDL_Rect* fore_dstrect{ nullptr };
+
+	void updateColour() override;
 
 public:
 
@@ -265,6 +267,7 @@ public:
 
 };
 
+//! The FD_DropdownButton, a button class allowing for dropdown selection.
 class FD_DropdownButton : public FD_Button, public std::enable_shared_from_this<FD_DropdownButton> {
 private:
 
@@ -279,6 +282,7 @@ private:
 
 	bool has_background{ false };
 	std::shared_ptr<FD_Element> bg;
+	FD_PureElement* bg_elem;
 	std::shared_ptr<FD_PureImage> bg_cpy;
 
 	int drop_selection{ -1 };
@@ -288,6 +292,7 @@ private:
 	void configureDropSelection(int dms);
 
 	void updateElements();
+	void updateColour() override;
 
 public:
 

@@ -7,6 +7,7 @@
 #include "../../state/fd_stateManager.hpp"
 #include "../../object/fd_objectGroup.hpp"
 #include "../../object/ui/fd_text.hpp"
+#include "../../object/ui/fd_textField.hpp"
 #include "../../object/ui/fd_buttonManager.hpp"
 
 namespace FD_Testing {
@@ -44,7 +45,7 @@ namespace FD_Testing {
 			"Camera Test",
 			"Event Listener Test",
 			"Audio Test",
-			"Temporary Test",
+			"Typing Test",
 			"Quit"
 		};
 
@@ -210,30 +211,28 @@ namespace FD_Testing {
 		void resized(int w, int h) override;
 	};
 
-	class FD_TemporaryTestState : public FD_State {
+	class FD_TypingState : public FD_State {
 	private:
 
 		enum Inputs {
 			BACK,
 
-			SWITCH
+			TYPE
 		};
 
 		FD_CameraIndex camera;
 		std::shared_ptr<FD_CameraSet> cameras;
-		std::shared_ptr<FD_Font> font;
-		std::shared_ptr<FD_Text> alert;
-		size_t forefront_index{ 0 };
-		std::vector<std::shared_ptr<FD_ObjectGroup>> groups{};
-		std::vector<std::shared_ptr<FD_Element>> elements{};
+		std::shared_ptr<FD_ObjectGroup> group;
 		std::shared_ptr<FD_InputSet> input;
 
+		FD_ButtonManager* bm;
 		std::shared_ptr<FD_Element> background;
+		std::vector<std::shared_ptr<FD_TextField>> fields{};
 
 	public:
 
-		FD_TemporaryTestState(std::weak_ptr<FD_Scene> scene);
-		~FD_TemporaryTestState();
+		FD_TypingState(std::weak_ptr<FD_Scene> scene);
+		~FD_TypingState();
 
 		void sleep() override;
 		void wake() override;

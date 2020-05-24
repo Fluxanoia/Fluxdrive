@@ -51,6 +51,9 @@ public:
 	//! Sets default SDL rendering hints.
 	void setDefaultHints();
 
+	// Updates the window.
+	void update();
+
 	//! Parses a given SDL_WindowEvent.
 	/*!
 		This is usually called by an associated FD_Scene.	

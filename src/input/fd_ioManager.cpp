@@ -48,6 +48,12 @@ void FD_IOManager::pushEvent(const SDL_Event* e) {
 	case SDL_MOUSEWHEEL:
 		input->pushMouseWheelEvent(&e->wheel);
 		break;
+	case SDL_TEXTINPUT:
+		input->pushTextInputEvent(&e->text);
+		break;
+	case SDL_TEXTEDITING:
+		input->pushTextEditingEvent(&e->edit);
+		break;
 	}
 }
 

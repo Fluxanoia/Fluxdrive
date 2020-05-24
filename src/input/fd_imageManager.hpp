@@ -61,6 +61,12 @@ public:
 	*/
 	bool verify(const FD_FontRegister reg, const int size) const;
 
+	//! Returns the rendered dimensions of the given text.
+	/*!
+		\return The rendered dimensions of the given text.
+	*/
+	bool getRenderedDimensions(std::string s, int& w, int& h);
+
 	//! Returns the size of the font.
 	/*!
 		\return The size of the font.
@@ -97,7 +103,9 @@ protected:
 		//! Corresponds to FD_FileImage.
 		IT_FILE,
 		//! Corresponds to FD_PureImage.
-		IT_PURE
+		IT_PURE,
+		//! Corresponds to FD_GeomImage.
+		IT_GEOM
 	};
 
 	//! The type of the image.
@@ -148,15 +156,19 @@ public:
 		\param center_x The x center of the image relative to its top left corner, in units of the image's width.
 		\param center_y The y center of the image relative to its top left corner, in units of the image's height.
 		\param flip     The flip flags of the image.
+		\param blend    The blend mode of the image.
+		\param clip     The clip rectangle of the image.
 	*/
 	virtual void render(SDL_Renderer* renderer,
-		const Uint8 alpha = 255,
-		const SDL_Rect * srcrect = nullptr,
-		const SDL_Rect * dstrect = nullptr,
-		const double angle = 0.0,
-		const double center_x = 0.5,
-		const double center_y = 0.5,
-		const SDL_RendererFlip flip = SDL_FLIP_NONE);
+		Uint8 alpha = 255,
+		const SDL_Rect* srcrect = nullptr,
+		const SDL_Rect* dstrect = nullptr,
+		double angle = 0.0,
+		double center_x = 0.5,
+		double center_y = 0.5,
+		SDL_RendererFlip flip = SDL_FLIP_NONE,
+		SDL_BlendMode blend = SDL_BLENDMODE_NONE,
+		const SDL_Rect* clip = nullptr);
 
 	//! Checks whether two images are identical using a register.
 	/*!
@@ -264,7 +276,7 @@ private:
 	const std::string prefix;
 	const std::string suffix;
 	std::string text;
-	const SDL_Colour colour;
+	SDL_Colour colour;
 	const std::shared_ptr<FD_Font> font;
 
 public:
@@ -297,6 +309,14 @@ public:
 	*/
 	void changeText(SDL_Renderer* renderer, std::string text);
 
+	//! Changes the colour of the text.
+	/*!
+		\warning This does not redraw the image.
+
+		\param c The new text colour.
+	*/
+	void setTextColour(SDL_Colour c);
+
 };
 
 //! This allows the FD_PureImage to re-draw itself by storing the components seperately.
@@ -314,9 +334,11 @@ typedef struct FD_PureElement_ {
 	//! The center of the element, relative to the top left.
 	SDL_Point* center{ nullptr };
 	//! The flipping flags of the element.
-	SDL_RendererFlip flags;
+	SDL_RendererFlip flags{ SDL_FLIP_NONE };
 	//! The blend mode.
 	SDL_BlendMode blend_mode{ SDL_BLENDMODE_BLEND };
+	//! The clip rectangle.
+	SDL_Rect* clip{ nullptr };
 } FD_PureElement;
 
 //! The FD_PureImage class, specialises the image for custom renderered texture.
@@ -329,9 +351,7 @@ private:
 
 	SDL_Renderer* renderer;
 	Uint32 pure_width, pure_height;
-	std::vector<FD_PureElement> elements;
-
-	void redraw();
+	std::vector<FD_PureElement*> elements;
 
 public:
 
@@ -348,9 +368,40 @@ public:
 		\sa FD_PureElement
 	*/
 	FD_PureImage(SDL_Renderer* renderer, Uint32 width, Uint32 height, 
-		std::vector<FD_PureElement> elements);
+		std::vector<FD_PureElement*> elements);
 	//! Destroys the FD_PureImage.
 	~FD_PureImage();
+
+	//! Removes an element from the image.
+	/*!
+		\warning This does not redraw the image.
+
+		\param e The element to remove.
+	*/
+	void remove(FD_PureElement* e);
+
+	//! Adds an element to the image.
+	/*!
+		\warning This does not redraw the image.
+
+		\param e The element to add.
+	*/
+	void add(FD_PureElement* e);
+
+	//! Removes all elements from the image.
+	/*!
+		\warning 
+	*/
+	void clear();
+
+	//! Redraws the image, should be used only when the elements change.
+	void redraw();
+	//! Redraws the image, should be used only when the elements change.
+	/*!
+		\param width The new width of the image.
+		\param height The new height of the image.
+	*/
+	void redraw(Uint32 width, Uint32 height);
 
 	//! When the window is resized, the video device is lost - this circumvents that issue.
 	/*!

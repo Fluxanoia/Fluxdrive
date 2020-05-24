@@ -68,7 +68,9 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">fd_inputManager.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -76,8 +78,11 @@ $(function() {
 
 <p>The file containing input managing classes and structures.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;memory&gt;</code><br />
+<div class="textblock"><code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;SDL_events.h&gt;</code><br />
 <code>#include &lt;SDL_haptic.h&gt;</code><br />
@@ -97,11 +102,38 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="class_f_d___input_manager.html" title="The FD_InputManager class, manages all input devices.">FD_InputManager</a> class, manages all input devices.  <a href="class_f_d___input_manager.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespace_f_d___input_functions"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_f_d___input_functions.html">FD_InputFunctions</a></td></tr>
+<tr class="memdesc:namespace_f_d___input_functions"><td class="mdescLeft">&#160;</td><td class="mdescRight">The namespace containing input determining functions. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:ac49e04a807c47c1ffd7f6be541e95d2b"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct_f_d___input_event__.html">FD_InputEvent_</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fd__input_manager_8hpp.html#ac49e04a807c47c1ffd7f6be541e95d2b">FD_InputEvent</a></td></tr>
 <tr class="memdesc:ac49e04a807c47c1ffd7f6be541e95d2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The FD_InputEvent struct, allows the data corresponding to an input event to be grouped.  <a href="fd__input_manager_8hpp.html#ac49e04a807c47c1ffd7f6be541e95d2b">More...</a><br /></td></tr>
 <tr class="separator:ac49e04a807c47c1ffd7f6be541e95d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a0e3fb478bf3c8183c153a98896012d4c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_f_d___input_functions.html#a0e3fb478bf3c8183c153a98896012d4c">FD_InputFunctions::isBlocking</a> (char c)</td></tr>
+<tr class="memdesc:a0e3fb478bf3c8183c153a98896012d4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a character is blocking.  <a href="namespace_f_d___input_functions.html#a0e3fb478bf3c8183c153a98896012d4c">More...</a><br /></td></tr>
+<tr class="separator:a0e3fb478bf3c8183c153a98896012d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1f2aae0454621fb347875d4f67fdb3a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_f_d___input_functions.html#ac1f2aae0454621fb347875d4f67fdb3a">FD_InputFunctions::isSpace</a> (char c)</td></tr>
+<tr class="memdesc:ac1f2aae0454621fb347875d4f67fdb3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a character is a space.  <a href="namespace_f_d___input_functions.html#ac1f2aae0454621fb347875d4f67fdb3a">More...</a><br /></td></tr>
+<tr class="separator:ac1f2aae0454621fb347875d4f67fdb3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a176fa80560669c4819231d28ead33273"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_f_d___input_functions.html#a176fa80560669c4819231d28ead33273">FD_InputFunctions::isAlphabetical</a> (char c)</td></tr>
+<tr class="memdesc:a176fa80560669c4819231d28ead33273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a character is alphabetical.  <a href="namespace_f_d___input_functions.html#a176fa80560669c4819231d28ead33273">More...</a><br /></td></tr>
+<tr class="separator:a176fa80560669c4819231d28ead33273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a3e85b7e969d8bb1ac36c3628a8f052"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_f_d___input_functions.html#a3a3e85b7e969d8bb1ac36c3628a8f052">FD_InputFunctions::isNumerical</a> (char c)</td></tr>
+<tr class="memdesc:a3a3e85b7e969d8bb1ac36c3628a8f052"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a character is numerical.  <a href="namespace_f_d___input_functions.html#a3a3e85b7e969d8bb1ac36c3628a8f052">More...</a><br /></td></tr>
+<tr class="separator:a3a3e85b7e969d8bb1ac36c3628a8f052"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ca75456e9ed08d05a0da276898a0c20"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_f_d___input_functions.html#a6ca75456e9ed08d05a0da276898a0c20">FD_InputFunctions::isAlphanumerical</a> (char c)</td></tr>
+<tr class="memdesc:a6ca75456e9ed08d05a0da276898a0c20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a character is alphanumerical.  <a href="namespace_f_d___input_functions.html#a6ca75456e9ed08d05a0da276898a0c20">More...</a><br /></td></tr>
+<tr class="separator:a6ca75456e9ed08d05a0da276898a0c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca40aed697f4ba17cd12bd0282e62c7a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_f_d___input_functions.html#aca40aed697f4ba17cd12bd0282e62c7a">FD_InputFunctions::modifierHeld</a> (SDL_Keymod mod)</td></tr>
+<tr class="memdesc:aca40aed697f4ba17cd12bd0282e62c7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a key modifier is held.  <a href="namespace_f_d___input_functions.html#aca40aed697f4ba17cd12bd0282e62c7a">More...</a><br /></td></tr>
+<tr class="separator:aca40aed697f4ba17cd12bd0282e62c7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The file containing input managing classes and structures. </p>

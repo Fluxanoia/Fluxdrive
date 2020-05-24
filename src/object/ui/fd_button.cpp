@@ -8,14 +8,17 @@ FD_Button::FD_Button(const FD_ButtonTemplate temp)
 }
 FD_Button::~FD_Button() {}
 
+void FD_Button::updateColour() {}
+
 void FD_Button::press() {
 	if (!selected) return;
 	if (auto sfx = sfx_press.lock()) sfx->play();
-	newly_held = held = true;
+	held = true;
+	this->updateColour();
 }
 void FD_Button::reset() {
 	this->selected = false;
-	this->held = this->newly_held = false;
+	this->held = false;
 	this->update(FD_ButtonActivity{});
 }
 
@@ -87,30 +90,31 @@ FD_BasicButton::FD_BasicButton(const FD_ButtonTemplate& temp,
 	}
 	if (width == 0 || height == 0) FD_Handling::error("Button constructed with no area.");
 	// Create elements
-	std::vector<FD_PureElement> elements{};
-	FD_PureElement pe_back{}, pe_fore{};
+	std::vector<FD_PureElement*> elements{};
+	pe_fore = new FD_PureElement();
+	pe_back = new FD_PureElement();
 	// Add the background element
 	if (has_background) {
-		pe_back.image = background;
+		pe_back->image = background;
 		if (!temp.stretch_bg) {
 			back_dstrect = new SDL_Rect();
 			back_dstrect->x = (width - background->getWidth()) / 2;
 			back_dstrect->y = (height - background->getHeight()) / 2;
 			back_dstrect->w = background->getWidth();
 			back_dstrect->h = background->getHeight();
-			pe_back.dstrect = back_dstrect;
+			pe_back->dstrect = back_dstrect;
 		}
 		elements.push_back(pe_back);
 	}
 	// Add the overlay
 	if (has_overlay) {
-		pe_fore.image = overlay;
+		pe_fore->image = overlay;
 		fore_dstrect = new SDL_Rect();
 		fore_dstrect->x = (width - overlay->getWidth()) / 2;
 		fore_dstrect->y = (height - overlay->getHeight()) / 2;
 		fore_dstrect->w = overlay->getWidth();
 		fore_dstrect->h = overlay->getHeight();
-		pe_fore.dstrect = fore_dstrect;
+		pe_fore->dstrect = fore_dstrect;
 		elements.push_back(pe_fore);
 	}
 	// Create the pure image.
@@ -138,12 +142,29 @@ FD_BasicButton::FD_BasicButton(const FD_ButtonTemplate& temp,
 FD_BasicButton::~FD_BasicButton() {
 	if (back_dstrect != nullptr) delete back_dstrect;
 	if (fore_dstrect != nullptr) delete fore_dstrect;
+	if (pe_back != nullptr) delete pe_back;
+	if (pe_fore != nullptr) delete pe_fore;
+
+}
+
+void FD_BasicButton::updateColour() {
+	if (auto i = image.lock()) {
+		if (selected) {
+			if (held) {
+				i->setOverlayColour({ 0, 0, 0, 120 });
+			} else {
+				i->setOverlayColour({ 255, 255, 255, 120 });
+			}
+		} else {
+			i->setOverlayColour({ 0, 0, 0, 0 });
+		}
+	}
 }
 
 bool FD_BasicButton::release() {
 	if (held) {
-		newly_held = true;
 		held = false;
+		this->updateColour();
 		if (auto sfx = sfx_release.lock()) sfx->play();
 		return true;
 	}
@@ -157,24 +178,11 @@ void FD_BasicButton::reset() {
 void FD_BasicButton::update(FD_ButtonActivity activity) {
 	// Selection
 	if (!activity.selected) activity.selected = mouseSelected(activity);
-	if (activity.selected != this->selected || newly_held) {
-		newly_held = false;
-		if (auto i = image.lock()) {
-			if (activity.selected) {
-				if (held) {
-					i->setOverlayColour({ 0, 0, 0, 120 });
-				} else {
-					i->setOverlayColour({ 255, 255, 255, 120 });
-				}
-			} else {
-				i->setOverlayColour({ 0, 0, 0, 0 });
-			}
-		}
-	}
 	if (activity.selected != this->selected) {
-		if (auto sfx = sfx_hover.lock()) sfx->play();
 		this->selected = activity.selected;
 		if (!selected) held = false;
+		this->updateColour();
+		if (auto sfx = sfx_hover.lock()) sfx->play();
 	}
 	// Bounds updating
 	if (x->moved() || y->moved() || w->moved() || h->moved()) {
@@ -246,15 +254,15 @@ FD_DropdownButton::FD_DropdownButton(const FD_ButtonTemplate& temp,
 	if (width == 0 || height == 0) FD_Handling::error("Button constructed with no area.", true);
 	// Create the background
 	if (has_background) {
-		std::vector<FD_PureElement> elems{};
-		FD_PureElement pe_elem{};
+		std::vector<FD_PureElement*> elems{};
+		bg_elem = new FD_PureElement();
 		Uint32 pe_width{ width }, pe_height{ height };
-		pe_elem.image = background;
+		bg_elem->image = background;
 		if (!temp.stretch_bg) {
 			pe_width = background->getWidth(); 
 			pe_height = background->getHeight();
 		}
-		elems.push_back(pe_elem);
+		elems.push_back(bg_elem);
 		bg_cpy = std::make_shared<FD_PureImage>(
 			scene->getWindow()->getRenderer(), pe_width, pe_height, 
 			elems);
@@ -306,12 +314,28 @@ FD_DropdownButton::FD_DropdownButton(const FD_ButtonTemplate& temp,
 	sfx_press = temp.sfx_press;
 	sfx_release = temp.sfx_release;
 }
-FD_DropdownButton::~FD_DropdownButton() {}
+FD_DropdownButton::~FD_DropdownButton() {
+	delete bg_elem;
+}
+
+void FD_DropdownButton::updateColour() {
+	if (has_background) {
+		if (selected) {
+			if (held) {
+				bg->setOverlayColour({ 0, 0, 0, 120 });
+			} else {
+				bg->setOverlayColour({ 255, 255, 255, 120 });
+			}
+		} else {
+			bg->setOverlayColour({ 0, 0, 0, 0 });
+		}
+	}
+}
 
 bool FD_DropdownButton::release() {
 	if (held) {
-		newly_held = true;
 		held = false;
+		this->updateColour();
 		if (dropped) {
 			if (auto sfx = sfx_release.lock()) sfx->play();
 			if (drop_selection >= 0) {
@@ -354,24 +378,11 @@ void FD_DropdownButton::update(FD_ButtonActivity activity) {
 			}
 		}
 	}
-	if (activity.selected != this->selected || newly_held) {
-		newly_held = false;
-		if (has_background) {
-			if (activity.selected) {
-				if (held) {
-					bg->setOverlayColour({ 0, 0, 0, 120 });
-				} else {
-					bg->setOverlayColour({ 255, 255, 255, 120 });
-				}
-			} else {
-				bg->setOverlayColour({ 0, 0, 0, 0 });
-			}
-		}
-	}
 	if (activity.selected != this->selected) {
-		if (auto sfx = sfx_hover.lock()) sfx->play();
 		this->selected = activity.selected;
 		if (!selected) held = false;
+		this->updateColour();
+		if (auto sfx = sfx_hover.lock()) sfx->play();
 	}
 	// Drop selection
 	if (activity.mouse) configureDropSelection(dropMouseSelected(activity));

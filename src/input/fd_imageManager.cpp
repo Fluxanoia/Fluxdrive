@@ -26,6 +26,16 @@ bool FD_Font::verify(const FD_FontRegister reg, const int size) const {
 	return (this->reg == reg) && (this->size == size);
 }
 
+bool FD_Font::getRenderedDimensions(std::string s, int& w, int& h) {
+	int width{ 0 }, height{ 0 };
+	if (TTF_SizeText(font, s.c_str(), &width, &height)) {
+		return false;
+	}
+	w = width;
+	h = height;
+	return true;
+}
+
 TTF_Font* FD_Font::getFont() { return font; }
 FD_FontRegister FD_Font::getRegister() const { return reg; }
 int FD_Font::getSize() const { return size; }
@@ -51,23 +61,42 @@ void FD_Image::query() {
 	}
 }
 
-void FD_Image::render(SDL_Renderer* renderer, const Uint8 alpha, const SDL_Rect* srcrect, const SDL_Rect* dstrect,
-	const double angle, const double center_x,
-	const double center_y, const SDL_RendererFlip flip) {
+void FD_Image::render(SDL_Renderer* renderer, Uint8 alpha,
+	const SDL_Rect* srcrect, const SDL_Rect* dstrect,
+	double angle, double center_x, double center_y, SDL_RendererFlip flip,
+	SDL_BlendMode blend, const SDL_Rect* clip) {
 	// If there's no texture or it's completely transparent, stop
 	if (!loaded || texture == nullptr || alpha == 0) return;
 	// Prepare the destination
 	SDL_Point temp_center;
-	temp_center.x = static_cast<int>(center_x * dstrect->w);
-	temp_center.y = static_cast<int>(center_y * dstrect->h);
+	if (dstrect == nullptr) {
+		int out_w{ 0 }, out_h{ 0 };
+		SDL_GetRendererOutputSize(renderer, &out_w, &out_h);
+		temp_center.x = static_cast<int>(center_x * out_w);
+		temp_center.y = static_cast<int>(center_y * out_h);
+	} else {
+		temp_center.x = static_cast<int>(center_x * dstrect->w);
+		temp_center.y = static_cast<int>(center_y * dstrect->h);
+	}
 	SDL_Rect temp_dstrect = (dstrect == nullptr) ? SDL_Rect() : SDL_Rect(*dstrect);
 	// Extrude if needed
 	if (extrusion > 0) temp_dstrect = FD_Maths::extrude(temp_dstrect, extrusion);
 	// Set the renderer and the texture's blend modes
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+	SDL_BlendMode old_draw_blend{};
+	SDL_BlendMode old_texture_blend{};
+	SDL_GetRenderDrawBlendMode(renderer, &old_draw_blend);
+	SDL_GetTextureBlendMode(texture, &old_texture_blend);
+	SDL_SetRenderDrawBlendMode(renderer, blend);
+	SDL_SetTextureBlendMode(texture, blend);
+	// Set the clipping
+	SDL_Rect* old_clip{ nullptr };
+	bool clipping = (clip != nullptr);
+	if (clipping) {
+		SDL_RenderGetClipRect(renderer, old_clip);
+		SDL_RenderSetClipRect(renderer, clip);
+	}
 	// If the underlay colour is not completely transparent, draw it
-	if (underlay_colour.a != 0 || true) {
+	if (underlay_colour.a != 0) {
 		// Set the alpha in accordance to the overall alpha
 		Uint8 underlay_alpha = static_cast<Uint8>(underlay_colour.a * (alpha / 255.0));
 		SDL_SetRenderDrawColor(renderer, underlay_colour.r, underlay_colour.g,
@@ -101,8 +130,9 @@ void FD_Image::render(SDL_Renderer* renderer, const Uint8 alpha, const SDL_Rect*
 		}
 	}
 	// Reset the renderer and the texture's blend modes
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_NONE);
+	if (clipping) SDL_RenderSetClipRect(renderer, old_clip);
+	SDL_SetRenderDrawBlendMode(renderer, old_draw_blend);
+	SDL_SetTextureBlendMode(texture, old_texture_blend);
 }
 
 bool FD_Image::verify(const FD_ImageRegister path) const { return false; }
@@ -117,8 +147,18 @@ bool FD_Image::verify(const std::shared_ptr<FD_Font> font,
 void FD_Image::setToExtrude(int size) {
 	this->extrusion = size;
 }
-void FD_Image::setOverlayColour(SDL_Colour colour) { this->overlay_colour = colour; }
-void FD_Image::setUnderlayColour(SDL_Colour colour) { this->underlay_colour = colour; }
+void FD_Image::setOverlayColour(SDL_Colour colour) {
+	this->overlay_colour.r = colour.r;
+	this->overlay_colour.g = colour.g;
+	this->overlay_colour.b = colour.b;
+	this->overlay_colour.a = colour.a;
+}
+void FD_Image::setUnderlayColour(SDL_Colour colour) {
+	this->underlay_colour.r = colour.r;
+	this->underlay_colour.g = colour.g;
+	this->underlay_colour.b = colour.b;
+	this->underlay_colour.a = colour.a;
+}
 
 bool FD_Image::isLoaded() const { return loaded; }
 Uint32 FD_Image::getWidth() const { return width; }
@@ -127,7 +167,7 @@ SDL_Texture* FD_Image::getTexture() const { return texture; }
 
 // File Image Member Functions
 
-FD_FileImage::FD_FileImage(const std::weak_ptr<FD_Registry> registry, 
+FD_FileImage::FD_FileImage(const std::weak_ptr<FD_Registry> registry,
 	const FD_ImageRegister reg, SDL_Renderer* renderer)
 	: FD_Image(IT_FILE), reg{ reg } {
 	std::string path;
@@ -176,10 +216,14 @@ void FD_TextImage::changeText(SDL_Renderer* renderer, std::string text) {
 	}
 }
 
+void FD_TextImage::setTextColour(SDL_Colour c) {
+	this->colour = c;
+}
+
 // Pure Image Member Functions
 
-FD_PureImage::FD_PureImage(SDL_Renderer* renderer, 
-	Uint32 width, Uint32 height, std::vector<FD_PureElement> elements)
+FD_PureImage::FD_PureImage(SDL_Renderer* renderer,
+	Uint32 width, Uint32 height, std::vector<FD_PureElement*> elements)
 	: FD_Image(IT_PURE), FD_Resizable() {
 	this->renderer = renderer;
 	this->pure_width = width;
@@ -190,25 +234,54 @@ FD_PureImage::FD_PureImage(SDL_Renderer* renderer,
 }
 FD_PureImage::~FD_PureImage() { }
 
+void FD_PureImage::remove(FD_PureElement* e) {
+	auto it{ elements.begin() };
+	while (it != elements.end()) {
+		if ((*it) == e) {
+			it = elements.erase(it);
+		} else {
+			it++;
+		}
+	}
+}
+
+void FD_PureImage::add(FD_PureElement* e) {
+	elements.push_back(e);
+}
+
+void FD_PureImage::clear() {
+	elements.clear();
+}
+
+void FD_PureImage::redraw(Uint32 width, Uint32 height) {
+	this->pure_width = width;
+	this->pure_height = height;
+	this->redraw();
+}
 void FD_PureImage::redraw() {
 	if (texture != nullptr) SDL_DestroyTexture(texture);
 	texture = SDL_CreateTexture(renderer,
 		SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
 		this->pure_width, this->pure_height);
-	SDL_SetRenderTarget(renderer, texture);
+	double cx, cy;
 	std::shared_ptr<FD_Image> image;
-	for (FD_PureElement e : elements) {
-		FD_Handling::lock(e.image, image, true);
-		SDL_SetTextureBlendMode(image->getTexture(), e.blend_mode);
-		SDL_SetTextureAlphaMod(image->getTexture(), e.opacity);
-		SDL_RenderCopyEx(renderer,
-			image->getTexture(),
-			e.srcrect, e.dstrect,
-			e.angle, e.center, e.flags);
-		SDL_SetTextureAlphaMod(image->getTexture(), 255);
-		SDL_SetTextureBlendMode(image->getTexture(), SDL_BLENDMODE_NONE);
+	SDL_SetRenderTarget(renderer, texture);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+	SDL_RenderClear(renderer);
+	for (FD_PureElement* e : elements) {
+		FD_Handling::lock(e->image, image, true);
+		if (e->center == nullptr) {
+			cx = cy = 0.5;
+		} else {
+			cx = e->center->x;
+			cy = e->center->y;
+		}
+		image->render(renderer, e->opacity, e->srcrect,
+			e->dstrect, e->angle, cx, cy, e->flags,
+			e->blend_mode, e->clip);
 	}
 	SDL_SetRenderTarget(renderer, nullptr);
+	this->query();
 }
 
 void FD_PureImage::resized(int width, int height) {
@@ -246,9 +319,9 @@ std::weak_ptr<FD_TextImage> FD_ImageManager::loadImage(const std::shared_ptr<FD_
 	return loadImage(font, "", text, "", colour);
 }
 std::weak_ptr<FD_TextImage> FD_ImageManager::loadImage(const std::shared_ptr<FD_Font> font,
-	const std::string prefix, 
-	const std::string text, 
-	const std::string suffix, 
+	const std::string prefix,
+	const std::string text,
+	const std::string suffix,
 	const SDL_Colour colour) {
 	// Check if the associated image is already in memory
 	for (std::shared_ptr<FD_TextImage> i : text_images) if (i->verify(font, prefix, text, suffix, colour)) return i;
@@ -274,14 +347,14 @@ std::vector<std::weak_ptr<FD_TextImage>> FD_ImageManager::bulkLoadImage(
 	const std::shared_ptr<FD_Font> font,
 	const std::vector<std::string> texts,
 	const SDL_Colour colour) {
-	return bulkLoadImage(font, 
+	return bulkLoadImage(font,
 		std::vector<std::string>(), texts,
 		std::vector<std::string>(), colour);
 }
 std::vector<std::weak_ptr<FD_TextImage>> FD_ImageManager::bulkLoadImage(
 	const std::shared_ptr<FD_Font> font,
-	const std::vector<std::string> prefixes, 
-	const std::vector<std::string> texts, 
+	const std::vector<std::string> prefixes,
+	const std::vector<std::string> texts,
 	const std::vector<std::string> suffixes,
 	const SDL_Colour colour) {
 	std::string p, s;
@@ -290,7 +363,7 @@ std::vector<std::weak_ptr<FD_TextImage>> FD_ImageManager::bulkLoadImage(
 		p = s = "";
 		if (i < prefixes.size()) p = prefixes.at(i);
 		if (i < suffixes.size()) s = suffixes.at(i);
-		v.push_back(this->loadImage(font, p, 
+		v.push_back(this->loadImage(font, p,
 			texts.at(i), s, colour));
 	}
 	return v;
@@ -329,9 +402,9 @@ bool FD_ImageManager::deleteImage(const std::shared_ptr<FD_Font> font,
 	return deleteImage(font, "", text, "", colour);
 }
 bool FD_ImageManager::deleteImage(const std::shared_ptr<FD_Font> font,
-	const std::string prefix, 
-	const std::string text, 
-	const std::string suffix, 
+	const std::string prefix,
+	const std::string text,
+	const std::string suffix,
 	const SDL_Colour colour) {
 	auto it = text_images.begin();
 	while (it != text_images.end()) {

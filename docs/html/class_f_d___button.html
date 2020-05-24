@@ -64,6 +64,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_f_d___button-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -81,10 +82,11 @@ Inheritance diagram for FD_Button:</div>
  <div class="center">
   <img src="class_f_d___button.png" usemap="#FD_5FButton_map" alt=""/>
   <map id="FD_5FButton_map" name="FD_5FButton_map">
-<area href="class_f_d___object.html" title="The virtual FD_Object class, the framework for the individual elements drawn by the engine." alt="FD_Object" shape="rect" coords="69,56,198,80"/>
-<area href="class_f_d___layered.html" title="The FD_Layered class, adds layering functionality to classes." alt="FD_Layered" shape="rect" coords="69,0,198,24"/>
+<area href="class_f_d___object.html" title="The virtual FD_Object class, the framework for the individual elements drawn by the engine." alt="FD_Object" shape="rect" coords="139,56,268,80"/>
+<area href="class_f_d___layered.html" title="The FD_Layered class, adds layering functionality to classes." alt="FD_Layered" shape="rect" coords="139,0,268,24"/>
 <area href="class_f_d___basic_button.html" title="The FD_BasicButton, a simple button class." alt="FD_BasicButton" shape="rect" coords="0,168,129,192"/>
-<area href="class_f_d___dropdown_button.html" alt="FD_DropdownButton" shape="rect" coords="139,168,268,192"/>
+<area href="class_f_d___dropdown_button.html" title="The FD_DropdownButton, a button class allowing for dropdown selection." alt="FD_DropdownButton" shape="rect" coords="139,168,268,192"/>
+<area href="class_f_d___text_field.html" title="The FD_TextField, a text input box and a button." alt="FD_TextField" shape="rect" coords="278,168,407,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -198,6 +200,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8795de6f0b84111b7ff0382b12498d02 inherit pub_methods_class_f_d___object"><td class="memItemLeft" align="right" valign="top">virtual SDL_RendererFlip&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#a8795de6f0b84111b7ff0382b12498d02">getFlipFlags</a> () const</td></tr>
 <tr class="memdesc:a8795de6f0b84111b7ff0382b12498d02 inherit pub_methods_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the rendering flipping flags of the object.  <a href="class_f_d___object.html#a8795de6f0b84111b7ff0382b12498d02">More...</a><br /></td></tr>
 <tr class="separator:a8795de6f0b84111b7ff0382b12498d02 inherit pub_methods_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae14cf0e7186e178eaf2d9b4ef39c018d inherit pub_methods_class_f_d___object"><td class="memItemLeft" align="right" valign="top">virtual SDL_BlendMode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#ae14cf0e7186e178eaf2d9b4ef39c018d">getBlendMode</a> () const</td></tr>
+<tr class="memdesc:ae14cf0e7186e178eaf2d9b4ef39c018d inherit pub_methods_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the blend mode of the object.  <a href="class_f_d___object.html#ae14cf0e7186e178eaf2d9b4ef39c018d">More...</a><br /></td></tr>
+<tr class="separator:ae14cf0e7186e178eaf2d9b4ef39c018d inherit pub_methods_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aea6160e3720b4ae97e408da6db02e7 inherit pub_methods_class_f_d___object"><td class="memItemLeft" align="right" valign="top">virtual SDL_Rect *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#a8aea6160e3720b4ae97e408da6db02e7">getClipRect</a> () const</td></tr>
+<tr class="memdesc:a8aea6160e3720b4ae97e408da6db02e7 inherit pub_methods_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the clipping rectangle of the object.  <a href="class_f_d___object.html#a8aea6160e3720b4ae97e408da6db02e7">More...</a><br /></td></tr>
+<tr class="separator:a8aea6160e3720b4ae97e408da6db02e7 inherit pub_methods_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e1bde0ab9d4827e6d4c48fcdb6f371f inherit pub_methods_class_f_d___object"><td class="memItemLeft" align="right" valign="top">virtual Uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#a4e1bde0ab9d4827e6d4c48fcdb6f371f">getOpacity</a> () const</td></tr>
 <tr class="memdesc:a4e1bde0ab9d4827e6d4c48fcdb6f371f inherit pub_methods_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the opacity of the object.  <a href="class_f_d___object.html#a4e1bde0ab9d4827e6d4c48fcdb6f371f">More...</a><br /></td></tr>
 <tr class="separator:a4e1bde0ab9d4827e6d4c48fcdb6f371f inherit pub_methods_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,12 +235,25 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ab884f7cebf9c99353802b13681f6ee81 inherit pub_methods_class_f_d___layered"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the object with an object group.  <a href="class_f_d___layered.html#ab884f7cebf9c99353802b13681f6ee81">More...</a><br /></td></tr>
 <tr class="separator:ab884f7cebf9c99353802b13681f6ee81 inherit pub_methods_class_f_d___layered"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a863f539032b565590623757097fe7160"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button.html#a863f539032b565590623757097fe7160">updateColour</a> ()</td></tr>
+<tr class="memdesc:a863f539032b565590623757097fe7160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the overlay colour of the button.  <a href="class_f_d___button.html#a863f539032b565590623757097fe7160">More...</a><br /></td></tr>
+<tr class="separator:a863f539032b565590623757097fe7160"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_class_f_d___object"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_f_d___object')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_f_d___object.html">FD_Object</a></td></tr>
+<tr class="memitem:a46760114f0d53da19d491cbf71662f8a inherit pro_methods_class_f_d___object"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#a46760114f0d53da19d491cbf71662f8a">updateBounds</a> (SDL_Rect *rect, double <a class="el" href="class_f_d___object.html#aa95cc3a30e3dc32dad39d94b42c0f929">x</a>, double <a class="el" href="class_f_d___object.html#adc601647f837366c773d5afc9c9836e6">y</a>, double <a class="el" href="class_f_d___object.html#ac1c9a8bc311d99ece3453a27985ce602">w</a>, double <a class="el" href="class_f_d___object.html#ad26a99fe7ce1a839222a64a35b2c8913">h</a>, <a class="el" href="fd__object_8hpp.html#a167ef3520c0475da33e74c870fcf05e6">FD_DrawStyle</a> style)</td></tr>
+<tr class="memdesc:a46760114f0d53da19d491cbf71662f8a inherit pro_methods_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">This updates a rectangle with respect to the given parameters.  <a href="class_f_d___object.html#a46760114f0d53da19d491cbf71662f8a">More...</a><br /></td></tr>
+<tr class="separator:a46760114f0d53da19d491cbf71662f8a inherit pro_methods_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d15de8a93dac08207d9c5f4bb500a56 inherit pro_methods_class_f_d___object"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#a7d15de8a93dac08207d9c5f4bb500a56">updateBounds</a> (SDL_Rect *rect)</td></tr>
+<tr class="memdesc:a7d15de8a93dac08207d9c5f4bb500a56 inherit pro_methods_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">This updates a rectangle with respect to the objects parameters.  <a href="class_f_d___object.html#a7d15de8a93dac08207d9c5f4bb500a56">More...</a><br /></td></tr>
+<tr class="separator:a7d15de8a93dac08207d9c5f4bb500a56 inherit pro_methods_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a6703fe69986511f3abc911fcf5cfddff"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="class_f_d___scene.html">FD_Scene</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button.html#a6703fe69986511f3abc911fcf5cfddff">scene</a></td></tr>
 <tr class="memdesc:a6703fe69986511f3abc911fcf5cfddff"><td class="mdescLeft">&#160;</td><td class="mdescRight">The scene used by the button.  <a href="class_f_d___button.html#a6703fe69986511f3abc911fcf5cfddff">More...</a><br /></td></tr>
 <tr class="separator:a6703fe69986511f3abc911fcf5cfddff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04f982bd3bc638c8b9cb3600bc7dc560"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="class_f_d___image.html">FD_Image</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button.html#a04f982bd3bc638c8b9cb3600bc7dc560">image</a> {}</td></tr>
+<tr class="memitem:a04f982bd3bc638c8b9cb3600bc7dc560"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="class_f_d___image.html">FD_Image</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button.html#a04f982bd3bc638c8b9cb3600bc7dc560">image</a></td></tr>
 <tr class="memdesc:a04f982bd3bc638c8b9cb3600bc7dc560"><td class="mdescLeft">&#160;</td><td class="mdescRight">The image of the button.  <a href="class_f_d___button.html#a04f982bd3bc638c8b9cb3600bc7dc560">More...</a><br /></td></tr>
 <tr class="separator:a04f982bd3bc638c8b9cb3600bc7dc560"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19c6049df964ab08069e26fe84146b3f"><td class="memItemLeft" align="right" valign="top">std::weak_ptr&lt; <a class="el" href="class_f_d___s_f_x.html">FD_SFX</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button.html#a19c6049df964ab08069e26fe84146b3f">sfx_hover</a> { std::weak_ptr&lt;<a class="el" href="class_f_d___s_f_x.html">FD_SFX</a>&gt;() }</td></tr>
@@ -250,9 +271,6 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a2900f312ec24718fb96de452ee676e30"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button.html#a2900f312ec24718fb96de452ee676e30">selected</a> { false }</td></tr>
 <tr class="memdesc:a2900f312ec24718fb96de452ee676e30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the button is selected (hovered over) or not.  <a href="class_f_d___button.html#a2900f312ec24718fb96de452ee676e30">More...</a><br /></td></tr>
 <tr class="separator:a2900f312ec24718fb96de452ee676e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a361d1aacaf68c8a25ae16c2d14b6e09f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button.html#a361d1aacaf68c8a25ae16c2d14b6e09f">newly_held</a> { false }</td></tr>
-<tr class="memdesc:a361d1aacaf68c8a25ae16c2d14b6e09f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the button has recently been held (since it was last checked).  <a href="class_f_d___button.html#a361d1aacaf68c8a25ae16c2d14b6e09f">More...</a><br /></td></tr>
-<tr class="separator:a361d1aacaf68c8a25ae16c2d14b6e09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3cd1cf2852939daf3b0d929bfff6e89"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button.html#aa3cd1cf2852939daf3b0d929bfff6e89">held</a> { false }</td></tr>
 <tr class="memdesc:aa3cd1cf2852939daf3b0d929bfff6e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the button is held down or not.  <a href="class_f_d___button.html#aa3cd1cf2852939daf3b0d929bfff6e89">More...</a><br /></td></tr>
 <tr class="separator:aa3cd1cf2852939daf3b0d929bfff6e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -305,13 +323,12 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a6b6feb01e8d43b8c0e398efdb7bb7342 inherit pro_attribs_class_f_d___object"><td class="memItemLeft" align="right" valign="top">SDL_RendererFlip&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#a6b6feb01e8d43b8c0e398efdb7bb7342">flip_flags</a> { SDL_FLIP_NONE }</td></tr>
 <tr class="memdesc:a6b6feb01e8d43b8c0e398efdb7bb7342 inherit pro_attribs_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">The flip flags of the object.  <a href="class_f_d___object.html#a6b6feb01e8d43b8c0e398efdb7bb7342">More...</a><br /></td></tr>
 <tr class="separator:a6b6feb01e8d43b8c0e398efdb7bb7342 inherit pro_attribs_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_class_f_d___object"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_f_d___object')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_f_d___object.html">FD_Object</a></td></tr>
-<tr class="memitem:a46760114f0d53da19d491cbf71662f8a inherit pro_methods_class_f_d___object"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#a46760114f0d53da19d491cbf71662f8a">updateBounds</a> (SDL_Rect *rect, double <a class="el" href="class_f_d___object.html#aa95cc3a30e3dc32dad39d94b42c0f929">x</a>, double <a class="el" href="class_f_d___object.html#adc601647f837366c773d5afc9c9836e6">y</a>, double <a class="el" href="class_f_d___object.html#ac1c9a8bc311d99ece3453a27985ce602">w</a>, double <a class="el" href="class_f_d___object.html#ad26a99fe7ce1a839222a64a35b2c8913">h</a>, <a class="el" href="fd__object_8hpp.html#a167ef3520c0475da33e74c870fcf05e6">FD_DrawStyle</a> style)</td></tr>
-<tr class="memdesc:a46760114f0d53da19d491cbf71662f8a inherit pro_methods_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">This updates the destination rectangle of the object.  <a href="class_f_d___object.html#a46760114f0d53da19d491cbf71662f8a">More...</a><br /></td></tr>
-<tr class="separator:a46760114f0d53da19d491cbf71662f8a inherit pro_methods_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a84ba9ad8af584e6189fead8069b08 inherit pro_attribs_class_f_d___object"><td class="memItemLeft" align="right" valign="top">SDL_BlendMode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#ad7a84ba9ad8af584e6189fead8069b08">blend_mode</a> { SDL_BLENDMODE_BLEND }</td></tr>
+<tr class="memdesc:ad7a84ba9ad8af584e6189fead8069b08 inherit pro_attribs_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">The blend mode of the object.  <a href="class_f_d___object.html#ad7a84ba9ad8af584e6189fead8069b08">More...</a><br /></td></tr>
+<tr class="separator:ad7a84ba9ad8af584e6189fead8069b08 inherit pro_attribs_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a989d5509d98f64f32ea388d27bab59bc inherit pro_attribs_class_f_d___object"><td class="memItemLeft" align="right" valign="top">SDL_Rect *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___object.html#a989d5509d98f64f32ea388d27bab59bc">clip_rect</a> { nullptr }</td></tr>
+<tr class="memdesc:a989d5509d98f64f32ea388d27bab59bc inherit pro_attribs_class_f_d___object"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clipping rectangle of the object.  <a href="class_f_d___object.html#a989d5509d98f64f32ea388d27bab59bc">More...</a><br /></td></tr>
+<tr class="separator:a989d5509d98f64f32ea388d27bab59bc inherit pro_attribs_class_f_d___object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="class_f_d___button.html" title="The FD_Button class, the framework for all buttons.">FD_Button</a> class, the framework for all buttons. </p>
@@ -705,7 +722,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Whether the button is selected by the mouse. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_f_d___dropdown_button.html#aeb8c01b73b2288230da4690d908a2189">FD_DropdownButton</a>, and <a class="el" href="class_f_d___basic_button.html#a3e4a65cccf5ef65bec5f6790fdc7b8eb">FD_BasicButton</a>.</p>
+<p>Implemented in <a class="el" href="class_f_d___dropdown_button.html#aeb8c01b73b2288230da4690d908a2189">FD_DropdownButton</a>, <a class="el" href="class_f_d___basic_button.html#a3e4a65cccf5ef65bec5f6790fdc7b8eb">FD_BasicButton</a>, and <a class="el" href="class_f_d___text_field.html#aa19378c9419b39b3c52d5f4596b383c6">FD_TextField</a>.</p>
 
 </div>
 </div>
@@ -734,6 +751,8 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Performs a press action on the button. </p>
 
+<p>Reimplemented in <a class="el" href="class_f_d___text_field.html#a3f123270e5225468c02ff20b8b426efd">FD_TextField</a>.</p>
+
 </div>
 </div>
 <a id="add9a506375e5c1a90ca44cb2bbe1cb40"></a>
@@ -761,7 +780,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Performs a release action on the button. </p>
 
-<p>Implemented in <a class="el" href="class_f_d___dropdown_button.html#adbf302fd0655f7e88dfa3b88b7e6d7fa">FD_DropdownButton</a>, and <a class="el" href="class_f_d___basic_button.html#a3cd720e7b803bea5e290f6b957eda9ea">FD_BasicButton</a>.</p>
+<p>Implemented in <a class="el" href="class_f_d___dropdown_button.html#adbf302fd0655f7e88dfa3b88b7e6d7fa">FD_DropdownButton</a>, <a class="el" href="class_f_d___basic_button.html#a3cd720e7b803bea5e290f6b957eda9ea">FD_BasicButton</a>, and <a class="el" href="class_f_d___text_field.html#a2aa48e19d501d186f9c384b778326545">FD_TextField</a>.</p>
 
 </div>
 </div>
@@ -790,7 +809,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Resets the state of the button (whether it's selected or held). </p>
 
-<p>Reimplemented in <a class="el" href="class_f_d___dropdown_button.html#a80b6b43bb857b239c60143a5d8d06a66">FD_DropdownButton</a>, and <a class="el" href="class_f_d___basic_button.html#a2b6757884708a05e314df878d0f670af">FD_BasicButton</a>.</p>
+<p>Reimplemented in <a class="el" href="class_f_d___dropdown_button.html#a80b6b43bb857b239c60143a5d8d06a66">FD_DropdownButton</a>, <a class="el" href="class_f_d___basic_button.html#a2b6757884708a05e314df878d0f670af">FD_BasicButton</a>, and <a class="el" href="class_f_d___text_field.html#a21b70c7bd62bf8186363390317fd1776">FD_TextField</a>.</p>
 
 </div>
 </div>
@@ -826,7 +845,34 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_f_d___dropdown_button.html#a6ccfc8a34aca749237c1165c1c8944ff">FD_DropdownButton</a>, and <a class="el" href="class_f_d___basic_button.html#ab529493bf5ec619d371c36a9398261cf">FD_BasicButton</a>.</p>
+<p>Implemented in <a class="el" href="class_f_d___dropdown_button.html#a6ccfc8a34aca749237c1165c1c8944ff">FD_DropdownButton</a>, <a class="el" href="class_f_d___basic_button.html#ab529493bf5ec619d371c36a9398261cf">FD_BasicButton</a>, and <a class="el" href="class_f_d___text_field.html#aa9b2e92e5f50682738356c6a1528e8d3">FD_TextField</a>.</p>
+
+</div>
+</div>
+<a id="a863f539032b565590623757097fe7160"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a863f539032b565590623757097fe7160">&#9670;&nbsp;</a></span>updateColour()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FD_Button::updateColour </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the overlay colour of the button. </p>
 
 </div>
 </div>
@@ -890,7 +936,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::weak_ptr&lt;<a class="el" href="class_f_d___image.html">FD_Image</a>&gt; FD_Button::image {}</td>
+          <td class="memname">std::weak_ptr&lt;<a class="el" href="class_f_d___image.html">FD_Image</a>&gt; FD_Button::image</td>
         </tr>
       </table>
   </td>
@@ -901,31 +947,6 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The image of the button. </p>
-
-</div>
-</div>
-<a id="a361d1aacaf68c8a25ae16c2d14b6e09f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a361d1aacaf68c8a25ae16c2d14b6e09f">&#9670;&nbsp;</a></span>newly_held</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool FD_Button::newly_held { false }</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Whether the button has recently been held (since it was last checked). </p>
-<dl class="section warning"><dt>Warning</dt><dd>It is the derived class' responsibility to reset this value when used. </dd></dl>
 
 </div>
 </div>

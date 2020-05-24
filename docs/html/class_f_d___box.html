@@ -87,7 +87,7 @@ Inheritance diagram for FD_Box:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aec344c3c0e81b48807d9505f52e52c4e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#aec344c3c0e81b48807d9505f52e52c4e">FD_Box</a> (double x, double y, double w, double h, int z, bool camera_bound, SDL_Colour colour={ 255, 255, 255, 255 })</td></tr>
-<tr class="memdesc:aec344c3c0e81b48807d9505f52e52c4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_f_d___line.html" title="The FD_Line class, the basic line object.">FD_Line</a>.  <a href="class_f_d___box.html#aec344c3c0e81b48807d9505f52e52c4e">More...</a><br /></td></tr>
+<tr class="memdesc:aec344c3c0e81b48807d9505f52e52c4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_f_d___box.html" title="The FD_Box class, the basic rectangle object.">FD_Box</a>.  <a href="class_f_d___box.html#aec344c3c0e81b48807d9505f52e52c4e">More...</a><br /></td></tr>
 <tr class="separator:aec344c3c0e81b48807d9505f52e52c4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75c4b880b50944eaacfc1e47a55c637c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#a75c4b880b50944eaacfc1e47a55c637c">~FD_Box</a> ()</td></tr>
 <tr class="memdesc:a75c4b880b50944eaacfc1e47a55c637c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_f_d___box.html" title="The FD_Box class, the basic rectangle object.">FD_Box</a>.  <a href="class_f_d___box.html#a75c4b880b50944eaacfc1e47a55c637c">More...</a><br /></td></tr>
@@ -98,6 +98,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a20abe62383936bc2d5d741680a54a044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#a20abe62383936bc2d5d741680a54a044">removeRect</a> ()</td></tr>
 <tr class="memdesc:a20abe62383936bc2d5d741680a54a044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wipes the supplied rectangle.  <a href="class_f_d___box.html#a20abe62383936bc2d5d741680a54a044">More...</a><br /></td></tr>
 <tr class="separator:a20abe62383936bc2d5d741680a54a044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9770db19bc1638f7fa9f1b8a346fbbe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#ae9770db19bc1638f7fa9f1b8a346fbbe">supplyClipRect</a> (SDL_Rect *rect)</td></tr>
+<tr class="memdesc:ae9770db19bc1638f7fa9f1b8a346fbbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Supplies a pointer to a clipping rectangle to the box.  <a href="class_f_d___box.html#ae9770db19bc1638f7fa9f1b8a346fbbe">More...</a><br /></td></tr>
+<tr class="separator:ae9770db19bc1638f7fa9f1b8a346fbbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7c856e0cb1b540fa68709ee52607971"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#ae7c856e0cb1b540fa68709ee52607971">removeClipRect</a> ()</td></tr>
+<tr class="memdesc:ae7c856e0cb1b540fa68709ee52607971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wipes the supplied clipping rectangle.  <a href="class_f_d___box.html#ae7c856e0cb1b540fa68709ee52607971">More...</a><br /></td></tr>
+<tr class="separator:ae7c856e0cb1b540fa68709ee52607971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfd7536a07a6598ec61c1e24eeea0b76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#abfd7536a07a6598ec61c1e24eeea0b76">render</a> (SDL_Renderer *renderer, const Uint8 alpha, const std::shared_ptr&lt; const <a class="el" href="class_f_d___camera.html">FD_Camera</a> &gt; camera) const override</td></tr>
 <tr class="memdesc:abfd7536a07a6598ec61c1e24eeea0b76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the <a class="el" href="class_f_d___box.html" title="The FD_Box class, the basic rectangle object.">FD_Box</a>.  <a href="class_f_d___box.html#abfd7536a07a6598ec61c1e24eeea0b76">More...</a><br /></td></tr>
 <tr class="separator:abfd7536a07a6598ec61c1e24eeea0b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,6 +119,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3828367c30ddc43d02e1a1023c68c2a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#a3828367c30ddc43d02e1a1023c68c2a7">setVisible</a> (bool visible)</td></tr>
 <tr class="memdesc:a3828367c30ddc43d02e1a1023c68c2a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the visibility of the box.  <a href="class_f_d___box.html#a3828367c30ddc43d02e1a1023c68c2a7">More...</a><br /></td></tr>
 <tr class="separator:a3828367c30ddc43d02e1a1023c68c2a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3130f7e84a9709df0d12a3d2d0e72eb0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#a3130f7e84a9709df0d12a3d2d0e72eb0">setBlendMode</a> (SDL_BlendMode bm)</td></tr>
+<tr class="memdesc:a3130f7e84a9709df0d12a3d2d0e72eb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the blend mode of the box.  <a href="class_f_d___box.html#a3130f7e84a9709df0d12a3d2d0e72eb0">More...</a><br /></td></tr>
+<tr class="separator:a3130f7e84a9709df0d12a3d2d0e72eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4394891f0c97ce4442d2db17c2c9cb45"><td class="memItemLeft" align="right" valign="top">SDL_Colour&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#a4394891f0c97ce4442d2db17c2c9cb45">getUnderlayColour</a> () const</td></tr>
 <tr class="memdesc:a4394891f0c97ce4442d2db17c2c9cb45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the colour of the underlay of the box.  <a href="class_f_d___box.html#a4394891f0c97ce4442d2db17c2c9cb45">More...</a><br /></td></tr>
 <tr class="separator:a4394891f0c97ce4442d2db17c2c9cb45"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,6 +134,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a023f4c3d0e758c449339506326d6e8ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#a023f4c3d0e758c449339506326d6e8ee">isVisible</a> () const</td></tr>
 <tr class="memdesc:a023f4c3d0e758c449339506326d6e8ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the box is visible or not.  <a href="class_f_d___box.html#a023f4c3d0e758c449339506326d6e8ee">More...</a><br /></td></tr>
 <tr class="separator:a023f4c3d0e758c449339506326d6e8ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32997e8310859ca62418d08f6921842f"><td class="memItemLeft" align="right" valign="top">SDL_BlendMode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#a32997e8310859ca62418d08f6921842f">getBlendMode</a> () const</td></tr>
+<tr class="memdesc:a32997e8310859ca62418d08f6921842f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the blend mode of the box.  <a href="class_f_d___box.html#a32997e8310859ca62418d08f6921842f">More...</a><br /></td></tr>
+<tr class="separator:a32997e8310859ca62418d08f6921842f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4eaf67aa287bf79ef71d53a361a0492"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___box.html#aa4eaf67aa287bf79ef71d53a361a0492">getX</a> () const</td></tr>
 <tr class="memdesc:aa4eaf67aa287bf79ef71d53a361a0492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the x-coordinate of the box.  <a href="class_f_d___box.html#aa4eaf67aa287bf79ef71d53a361a0492">More...</a><br /></td></tr>
 <tr class="separator:aa4eaf67aa287bf79ef71d53a361a0492"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -243,7 +255,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructs a <a class="el" href="class_f_d___line.html" title="The FD_Line class, the basic line object.">FD_Line</a>. </p>
+<p>Constructs a <a class="el" href="class_f_d___box.html" title="The FD_Box class, the basic rectangle object.">FD_Box</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The x-coordinate of the rectangle. </td></tr>
@@ -315,6 +327,26 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a32997e8310859ca62418d08f6921842f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32997e8310859ca62418d08f6921842f">&#9670;&nbsp;</a></span>getBlendMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SDL_BlendMode FD_Box::getBlendMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the blend mode of the box. </p>
+<dl class="section return"><dt>Returns</dt><dd>The blend mode of the box. </dd></dl>
+
+</div>
+</div>
 <a id="aa1e3ade871b54422b6b880de6a821df2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa1e3ade871b54422b6b880de6a821df2">&#9670;&nbsp;</a></span>getColour()</h2>
 
@@ -351,7 +383,6 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the height of the box. </p>
-<p>Note that this method does not access the value of the supplied pointer.</p>
 <dl class="section return"><dt>Returns</dt><dd>The height of the box. </dd></dl>
 
 </div>
@@ -532,7 +563,6 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the width of the box. </p>
-<p>Note that this method does not access the value of the supplied pointer.</p>
 <dl class="section return"><dt>Returns</dt><dd>The width of the box. </dd></dl>
 
 </div>
@@ -553,7 +583,6 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the x-coordinate of the box. </p>
-<p>Note that this method does not access the value of the supplied pointer.</p>
 <dl class="section return"><dt>Returns</dt><dd>The x-coordinate of the box. </dd></dl>
 
 </div>
@@ -574,7 +603,6 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the y-coordinate of the box. </p>
-<p>Note that this method does not access the value of the supplied pointer.</p>
 <dl class="section return"><dt>Returns</dt><dd>The y-coordinate of the box. </dd></dl>
 
 </div>
@@ -596,6 +624,26 @@ Public Member Functions</h2></td></tr>
 
 <p>Returns whether the box is visible or not. </p>
 <dl class="section return"><dt>Returns</dt><dd>Whether the box is visible or not. </dd></dl>
+
+</div>
+</div>
+<a id="ae7c856e0cb1b540fa68709ee52607971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7c856e0cb1b540fa68709ee52607971">&#9670;&nbsp;</a></span>removeClipRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FD_Box::removeClipRect </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wipes the supplied clipping rectangle. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_f_d___box.html#ae9770db19bc1638f7fa9f1b8a346fbbe" title="Supplies a pointer to a clipping rectangle to the box.">supplyClipRect</a> </dd></dl>
 
 </div>
 </div>
@@ -670,6 +718,32 @@ Public Member Functions</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="class_f_d___layered.html#af826beea8eb44d8a304c528827a6b29a">FD_Layered</a>.</p>
+
+</div>
+</div>
+<a id="a3130f7e84a9709df0d12a3d2d0e72eb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3130f7e84a9709df0d12a3d2d0e72eb0">&#9670;&nbsp;</a></span>setBlendMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FD_Box::setBlendMode </td>
+          <td>(</td>
+          <td class="paramtype">SDL_BlendMode&#160;</td>
+          <td class="paramname"><em>bm</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the blend mode of the box. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bm</td><td>The new blend mode. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -786,6 +860,27 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ae9770db19bc1638f7fa9f1b8a346fbbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9770db19bc1638f7fa9f1b8a346fbbe">&#9670;&nbsp;</a></span>supplyClipRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FD_Box::supplyClipRect </td>
+          <td>(</td>
+          <td class="paramtype">SDL_Rect *&#160;</td>
+          <td class="paramname"><em>rect</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Supplies a pointer to a clipping rectangle to the box. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_f_d___box.html#ae7c856e0cb1b540fa68709ee52607971" title="Wipes the supplied clipping rectangle.">removeClipRect</a> </dd></dl>
 
 </div>
 </div>

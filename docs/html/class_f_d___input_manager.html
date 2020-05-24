@@ -110,6 +110,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aecf8e2f7978edef0c707d10c467fddf3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___input_manager.html#aecf8e2f7978edef0c707d10c467fddf3">pushJoyDeviceEvent</a> (const SDL_JoyDeviceEvent *e)</td></tr>
 <tr class="memdesc:aecf8e2f7978edef0c707d10c467fddf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes a joystick device event.  <a href="class_f_d___input_manager.html#aecf8e2f7978edef0c707d10c467fddf3">More...</a><br /></td></tr>
 <tr class="separator:aecf8e2f7978edef0c707d10c467fddf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77e02e131fb97d76b9d71e4e39205e86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___input_manager.html#a77e02e131fb97d76b9d71e4e39205e86">pushTextInputEvent</a> (const SDL_TextInputEvent *e)</td></tr>
+<tr class="memdesc:a77e02e131fb97d76b9d71e4e39205e86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes a text input event.  <a href="class_f_d___input_manager.html#a77e02e131fb97d76b9d71e4e39205e86">More...</a><br /></td></tr>
+<tr class="separator:a77e02e131fb97d76b9d71e4e39205e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefccae4c46b219820ec2d58abdc8b358"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___input_manager.html#aefccae4c46b219820ec2d58abdc8b358">pushTextEditingEvent</a> (const SDL_TextEditingEvent *e)</td></tr>
+<tr class="memdesc:aefccae4c46b219820ec2d58abdc8b358"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes a text editting event.  <a href="class_f_d___input_manager.html#aefccae4c46b219820ec2d58abdc8b358">More...</a><br /></td></tr>
+<tr class="separator:aefccae4c46b219820ec2d58abdc8b358"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af97ae3ca33b4d91a6099f39af54917f4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___input_manager.html#af97ae3ca33b4d91a6099f39af54917f4">generateSet</a> ()</td></tr>
 <tr class="memdesc:af97ae3ca33b4d91a6099f39af54917f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a new input set and returns the corresponding ID.  <a href="class_f_d___input_manager.html#af97ae3ca33b4d91a6099f39af54917f4">More...</a><br /></td></tr>
 <tr class="separator:af97ae3ca33b4d91a6099f39af54917f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -611,6 +617,58 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Processes a mouse wheel event. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e</td><td>The event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aefccae4c46b219820ec2d58abdc8b358"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefccae4c46b219820ec2d58abdc8b358">&#9670;&nbsp;</a></span>pushTextEditingEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FD_InputManager::pushTextEditingEvent </td>
+          <td>(</td>
+          <td class="paramtype">const SDL_TextEditingEvent *&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Processes a text editting event. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e</td><td>The event. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a77e02e131fb97d76b9d71e4e39205e86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77e02e131fb97d76b9d71e4e39205e86">&#9670;&nbsp;</a></span>pushTextInputEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FD_InputManager::pushTextInputEvent </td>
+          <td>(</td>
+          <td class="paramtype">const SDL_TextInputEvent *&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Processes a text input event. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">e</td><td>The event. </td></tr>
