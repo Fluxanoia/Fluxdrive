@@ -101,6 +101,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adeae6aa8ed5939937165dc2debbe55d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button_manager.html#adeae6aa8ed5939937165dc2debbe55d0">addDropdownButton</a> (const <a class="el" href="fd__button_8hpp.html#ae09b0c370f948730ff191138dc8becde">FD_ButtonTemplate</a> &amp;temp, const int x, const int y, const std::vector&lt; int &gt; codes, const std::vector&lt; std::string &gt; texts, const std::shared_ptr&lt; <a class="el" href="class_f_d___font.html">FD_Font</a> &gt; font, const SDL_Colour colour, const size_t preselection=0)</td></tr>
 <tr class="memdesc:adeae6aa8ed5939937165dc2debbe55d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a dropdown button and adds it to the button manager.  <a href="class_f_d___button_manager.html#adeae6aa8ed5939937165dc2debbe55d0">More...</a><br /></td></tr>
 <tr class="separator:adeae6aa8ed5939937165dc2debbe55d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5dfe22be175ce6af1bf6d48b1c102ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button_manager.html#af5dfe22be175ce6af1bf6d48b1c102ef">removeButtons</a> (const int code)</td></tr>
+<tr class="memdesc:af5dfe22be175ce6af1bf6d48b1c102ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all the buttons corresponding to the given code.  <a href="class_f_d___button_manager.html#af5dfe22be175ce6af1bf6d48b1c102ef">More...</a><br /></td></tr>
+<tr class="separator:af5dfe22be175ce6af1bf6d48b1c102ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd0398752e5393e89cfb4a526d017785"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_d___button_manager.html#afd0398752e5393e89cfb4a526d017785">mouseSelected</a> () const</td></tr>
 <tr class="memdesc:afd0398752e5393e89cfb4a526d017785"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether any button is being hovered over by the mouse.  <a href="class_f_d___button_manager.html#afd0398752e5393e89cfb4a526d017785">More...</a><br /></td></tr>
 <tr class="separator:afd0398752e5393e89cfb4a526d017785"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -676,6 +679,32 @@ Public Member Functions</h2></td></tr>
 
 <p>Returns whether any button is being hovered over by the mouse. </p>
 <dl class="section return"><dt>Returns</dt><dd>Whether any button is being hovered over by the mouse. </dd></dl>
+
+</div>
+</div>
+<a id="af5dfe22be175ce6af1bf6d48b1c102ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5dfe22be175ce6af1bf6d48b1c102ef">&#9670;&nbsp;</a></span>removeButtons()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FD_ButtonManager::removeButtons </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>code</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes all the buttons corresponding to the given code. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">code</td><td>The code for the buttons to be removed. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

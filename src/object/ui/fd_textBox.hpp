@@ -155,6 +155,17 @@ public:
 	*/
 	bool isEditing() const;
 
+	//! Returns the tween corresponding to the x coordinate.
+	/*!
+		\return The tween corresponding to the x coordinate.
+	*/
+	FD_Tween* getTweenX();
+	//! Returns the tween corresponding to the y coordinate.
+	/*!
+		\return The tween corresponding to the y coordinate.
+	*/
+	FD_Tween* getTweenY();
+
 	//! Adds the box to the object group.
 	/*!
 		\param group The object group to add to.

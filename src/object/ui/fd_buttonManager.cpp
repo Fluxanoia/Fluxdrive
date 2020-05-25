@@ -191,6 +191,16 @@ void FD_ButtonManager::addDropdownButton(const FD_ButtonTemplate& temp,
 	buttons.push_back(button);
 	button->assimilate(group);
 }
+void FD_ButtonManager::removeButtons(const int code) {
+	auto it{ buttons.begin() };
+	while (it != buttons.end()) {
+		if ((*it)->getCode() == code) {
+			it = buttons.erase(it);
+		} else {
+			it++;
+		}
+	}
+}
 
 bool FD_ButtonManager::mouseSelected() const {
 	FD_ButtonActivity a{ prepareActivity() };

@@ -128,6 +128,11 @@ public:
 		const std::shared_ptr<FD_Font> font,
 		const SDL_Colour colour,
 		const size_t preselection = 0);
+	//! Removes all the buttons corresponding to the given code.
+	/*!
+		\param code The code for the buttons to be removed.
+	*/
+	void removeButtons(const int code);
 
 	//! Returns whether any button is being hovered over by the mouse.
 	/*!

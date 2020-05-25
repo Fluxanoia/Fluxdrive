@@ -460,6 +460,13 @@ FD_TextInfo FD_TextBox::getTextInfo() const {
 	return text_info;
 }
 
+FD_Tween* FD_TextBox::getTweenX() {
+	return x;
+}
+FD_Tween* FD_TextBox::getTweenY() {
+	return y;
+}
+
 void FD_TextBox::assimilate(std::shared_ptr<FD_ObjectGroup> group) {
 	this->object_group = group;
 	group->addObject(shared_from_this());

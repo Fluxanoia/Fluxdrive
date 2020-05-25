@@ -569,7 +569,7 @@ FD_Testing::FD_TypingState::FD_TypingState(std::weak_ptr<FD_Scene> s)
 	SDL_Colour sel_colour = { 120, 120, 240, 255 };
 	SDL_Colour sel_text_colour = { 0, 0, 0, 255 };
 	FD_ButtonTemplate temp{ s, group, 10, true };
-	temp.background = im->loadImage(FD_IMAGE_BUTTON);
+	//temp.background = im->loadImage(FD_IMAGE_BUTTON);
 	FD_Handling::lock(im->loadFont(FD_FONT, 64), def_font, true);
 	FD_TextTemplate type_temp{ 
 		def_font, font_colour, sel_colour, sel_text_colour,

@@ -46,14 +46,11 @@ FD_TextField::FD_TextField(const FD_ButtonTemplate& temp,
 		temp.camera_bound, FD_CENTERED
 	);
 	// Add the background
-	if (has_background) {
-		elements.push_back(new FD_PureElement{ background });
-		pure_image = std::make_shared<FD_PureImage>(
-			scene->getWindow()->getRenderer(), background->getWidth(),
-			background->getHeight(), elements);
-		scene->getWindow()->addResizable(pure_image);
-		this->image = pure_image; 
-	}
+	if (has_background) elements.push_back(new FD_PureElement{ background });
+	pure_image = std::make_shared<FD_PureImage>(
+			scene->getWindow()->getRenderer(), width, height, elements);
+	scene->getWindow()->addResizable(pure_image);
+	this->image = pure_image;
 	// Create an input set
 	std::shared_ptr<FD_InputSet> parent_set;
 	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
@@ -152,6 +149,8 @@ void FD_TextField::update(FD_ButtonActivity activity) {
 	if (x->moved() || y->moved() || w->moved() || h->moved()) {
 		FD_Object::updateBounds(dstrect, x->value(),
 			y->value(), w->value(), h->value(), FD_CENTERED);
+		text_box->getTweenX()->set(x->value());
+		text_box->getTweenY()->set(y->value());
 	}
 	// Text
 	text_box->update();
