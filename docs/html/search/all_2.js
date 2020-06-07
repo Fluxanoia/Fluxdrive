@@ -17,7 +17,8 @@ var searchData=
   ['close_53',['close',['../namespace_f_d___main.html#a833e3a2682c1d495828ecc4bd42ac8d2',1,'FD_Main']]],
   ['closed_54',['closed',['../class_f_d___loopable.html#a450c183ce7f1f63dbbcc0e3b62a46d08',1,'FD_Loopable::closed()'],['../class_f_d___state.html#a1bb093c35631bc4c4ea23007fe6108c3',1,'FD_State::closed()']]],
   ['code_55',['code',['../struct_f_d___input_event__.html#a17d3c85e4a812eb90476b76aee9c0853',1,'FD_InputEvent_']]],
-  ['copytext_56',['copyText',['../class_f_d___input_set.html#a5ac1018a9d329da08848d3650f5b5370',1,'FD_InputSet']]],
-  ['create_57',['create',['../class_f_d___file.html#a2d0d3ea7981a5009f4ed3d94bb96bd44',1,'FD_File']]],
-  ['cuttext_58',['cutText',['../class_f_d___input_set.html#a0ec47d7cfeb993d0aa2232b25606ee84',1,'FD_InputSet']]]
+  ['configure_56',['configure',['../class_f_d___factory.html#a9943b2791c2fac6ceb36057e711cf7c2',1,'FD_Factory::configure(std::shared_ptr&lt; FD_Line &gt; o)'],['../class_f_d___factory.html#ae7ac386962423fb292f3c3a485667835',1,'FD_Factory::configure(std::shared_ptr&lt; FD_Box &gt; o)'],['../class_f_d___factory.html#a7751f7081c4f6c1dd13e4b4a692561a5',1,'FD_Factory::configure(std::shared_ptr&lt; FD_Object &gt; o)']]],
+  ['copytext_57',['copyText',['../class_f_d___input_set.html#a5ac1018a9d329da08848d3650f5b5370',1,'FD_InputSet']]],
+  ['create_58',['create',['../class_f_d___file.html#a2d0d3ea7981a5009f4ed3d94bb96bd44',1,'FD_File']]],
+  ['cuttext_59',['cutText',['../class_f_d___input_set.html#a0ec47d7cfeb993d0aa2232b25606ee84',1,'FD_InputSet']]]
 ];

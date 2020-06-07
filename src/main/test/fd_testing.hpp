@@ -54,7 +54,7 @@ namespace FD_Testing {
 		std::shared_ptr<FD_ObjectGroup> group;
 		std::shared_ptr<FD_InputSet> input;
 
-		FD_ButtonManager* button_manager;
+		std::shared_ptr<FD_ButtonManager> button_manager;
 		std::shared_ptr<FD_Element> background;
 
 	public:
@@ -116,7 +116,7 @@ namespace FD_Testing {
 		std::shared_ptr<FD_ObjectGroup> group;
 		std::shared_ptr<FD_InputSet> input;
 
-		FD_ButtonManager* button_manager;
+		std::shared_ptr<FD_ButtonManager> button_manager;
 		std::shared_ptr<FD_Element> background;
 
 		std::shared_ptr<FD_Box> other_cam;
@@ -194,7 +194,7 @@ namespace FD_Testing {
 		std::shared_ptr<FD_ObjectGroup> group;
 		std::shared_ptr<FD_InputSet> input;
 
-		FD_ButtonManager* button_manager;
+		std::shared_ptr<FD_ButtonManager> button_manager;
 		std::shared_ptr<FD_Element> background;
 		std::shared_ptr<FD_Music> music;
 		std::shared_ptr<FD_SFX> sfx;
@@ -225,7 +225,7 @@ namespace FD_Testing {
 		std::shared_ptr<FD_ObjectGroup> group;
 		std::shared_ptr<FD_InputSet> input;
 
-		FD_ButtonManager* bm;
+		std::shared_ptr<FD_ButtonManager> bm;
 		std::shared_ptr<FD_Element> background;
 		std::vector<std::shared_ptr<FD_TextField>> fields{};
 

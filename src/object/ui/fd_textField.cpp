@@ -124,6 +124,7 @@ void FD_TextField::changeTextBox() {
 			input->getSelectionEndIndex()
 	} };
 	text_box->changeText(info);
+	has_changed = true;
 }
 void FD_TextField::update(FD_ButtonActivity activity) {
 	// Inputs
@@ -201,6 +202,22 @@ bool FD_TextField::mouseSelected(FD_ButtonActivity a) const {
 	} else {
 		return FD_Maths::pointInRect(a.x, a.y, dstrect);
 	}
+}
+
+bool FD_TextField::hasTextChanged() {
+	if (has_changed) {
+		has_changed = false;
+		return true;
+	}
+	return false;
+}
+
+FD_TextInfo FD_TextField::getTextInfo() const {
+	return text_box->getTextInfo();
+}
+
+bool FD_TextField::isFocused() const {
+	return focus;
 }
 
 void FD_TextField::assimilate(std::shared_ptr<FD_ObjectGroup> group) {

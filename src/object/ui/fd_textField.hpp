@@ -30,6 +30,8 @@ private:
 	std::vector<FD_PureElement*> elements;
 	std::shared_ptr<FD_PureImage> pure_image;
 
+	bool has_changed{ false };
+
 	bool focus{ false };
 	std::shared_ptr<FD_InputSet> input;
 	std::shared_ptr<FD_TextBox> text_box;
@@ -83,6 +85,24 @@ public:
 		\return Whether the button is selected by the mouse.
 	*/
 	bool mouseSelected(FD_ButtonActivity a) const override;
+
+	//! Returns the current text information.
+	/*!
+		\return The current text information.
+	*/
+	FD_TextInfo getTextInfo() const;
+
+	//! Returns whether the text field is focused (taking text input).
+	/*!
+		\return Whether the text field is focused (taking text input).
+	*/
+	bool isFocused() const;
+
+	//! Returns whether the text has changed since it was last checked.
+	/*!
+		\return Whether the text has changed since it was last checked.
+	*/
+	bool hasTextChanged();
 
 	//! Adds the button to the object group.
 	/*!

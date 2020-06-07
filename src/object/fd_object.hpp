@@ -60,8 +60,7 @@ public:
 		\param colour       The colour of the line.
 	*/
 	FD_Line(double x1, double y1, double x2, double y2, int z,
-		bool camera_bound,
-		SDL_Colour colour = { 255, 255, 255, 255 });
+		bool camera_bound, SDL_Colour colour);
 	//! Destroys the FD_Line.
 	~FD_Line();
 

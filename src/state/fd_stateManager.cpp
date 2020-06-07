@@ -2,7 +2,7 @@
 
 #include "../main/fd_handling.hpp"
 
-FD_StateManager::FD_StateManager(std::shared_ptr<FD_Scene> scene) : scene{ scene } {}
+FD_StateManager::FD_StateManager(std::weak_ptr<FD_Scene> scene) : scene{ scene } {}
 
 FD_StateManager::~FD_StateManager() {
 	FD_Handling::debug("FD_StateManager destroyed.");
@@ -10,7 +10,9 @@ FD_StateManager::~FD_StateManager() {
 
 void FD_StateManager::logState(std::weak_ptr<FD_State> s) {
 	std::shared_ptr<FD_State> state;
+	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(s, state, true);
+	FD_Handling::lock(this->scene, scene, true);
 	this->states.push_back(state);
 	scene->getWindow()->addResizable(state);
 	if (states.size() == 1) currentState = state->getID();
@@ -48,15 +50,21 @@ void FD_StateManager::update() {
 	} else {
 		this->closed = true;
 	}
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(this->scene, scene, true);
 	scene->update();
 }
 
 void FD_StateManager::render() {
 	if (currentState == FD_State::INVALID_STATE) return;
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(this->scene, scene, true);
 	scene->render();
 }
 
 void FD_StateManager::pushEvent(const SDL_Event* e) {
+	std::shared_ptr<FD_Scene> scene;
+	FD_Handling::lock(this->scene, scene, true);
 	scene->pushEvent(e);
 	auto it = event_list.begin();
 	while (it != event_list.end()) {

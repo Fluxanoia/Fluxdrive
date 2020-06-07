@@ -18,7 +18,7 @@
 class FD_StateManager : public FD_Loopable {
 private:
 
-	std::shared_ptr<FD_Scene> scene;
+	std::weak_ptr<FD_Scene> scene;
 
 	int currentState{ FD_State::INVALID_STATE };
 	std::vector<std::weak_ptr<FD_State>> states{};
@@ -30,7 +30,7 @@ public:
 	/*!
 		\param scene The scene for the manager to use.
 	*/
-	FD_StateManager(std::shared_ptr<FD_Scene> scene);
+	FD_StateManager(std::weak_ptr<FD_Scene> scene);
 	//! Destroys the FD_StateManager.
 	~FD_StateManager();
 

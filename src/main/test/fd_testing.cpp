@@ -1,7 +1,10 @@
 #include "fd_testing.hpp"
 
+#include "../../factory/fd_factory.hpp"
+
 // Runs the test suite
 void FD_Testing::test() {
+	// Print SDL version
 	SDL_version compiled;
 	SDL_version linked;
 	SDL_VERSION(&compiled);
@@ -12,15 +15,15 @@ void FD_Testing::test() {
 		std::to_string(linked.minor) + "." + std::to_string(linked.patch) };
 	FD_Handling::debug(("Tests are compiling on SDL version : " + cv).c_str());
 	FD_Handling::debug(("Tests are linking on SDL version   : " + lv).c_str());
-
-	// Runs visual test
+	// Create the window
 	std::shared_ptr<FD_Window> window{ std::make_shared<FD_Window>("Fluxdrive Test", 640, 360) };
+	// Create the scene
 #ifdef FD_TEST_MANUAL_SCENE
 	std::shared_ptr<FD_Scene> scene{ std::make_shared<FD_Scene>(window, false, 1280, 720) };
 #else
 	std::shared_ptr<FD_Scene> scene{ std::make_shared<FD_Scene>(window, "test/config/display.fdc") };
 #endif
-
+	// Create the registry (should be separate in larger projects)
 	std::shared_ptr<FD_Registry> registry{ std::make_shared<FD_Registry>() };
 	registry->log(FD_IMAGE_BACKGROUND, "test/images/bg.png");
 	registry->log(FD_IMAGE_BUTTON, "test/images/button.png");
@@ -29,7 +32,7 @@ void FD_Testing::test() {
 	registry->log(FD_BLIP, "test/audio/sfx.wav");
 	scene->getAudioManager()->setRegistry(registry);
 	scene->getImageManager()->setRegistry(registry);
-
+	// Create the states and state manager
 	std::shared_ptr<FD_StateManager> state_manager{ std::make_shared<FD_StateManager>(scene) };
 	std::shared_ptr<FD_TestChoiceState> choice_test{ std::make_shared<FD_TestChoiceState>(scene) };
 	std::shared_ptr<FD_CameraTestState> camera_test{ std::make_shared<FD_CameraTestState>(scene) };
@@ -42,10 +45,11 @@ void FD_Testing::test() {
 	state_manager->logState(audio_test);
 	state_manager->logState(temp_test);
 	state_manager->setState(FD_TEST_CHOICE_STATE);
-
+	// Log the event listener test
 	state_manager->logEventListener(event_test->getEventListener());
-
+	// Create the looper
 	std::shared_ptr<FD_Looper> looper{ std::make_shared<FD_Looper>(state_manager, 60) };
+	// Run the test suite
 	looper->loop();
 }
 
@@ -53,25 +57,23 @@ void FD_Testing::test() {
 
 FD_Testing::FD_TestChoiceState::FD_TestChoiceState(std::weak_ptr<FD_Scene> s)
 	: FD_State(FD_TEST_CAMERA_STATE, s) {
+	FD_Factory* factory{ new FD_Factory(s) };
 	std::shared_ptr<FD_Scene> scene;
-	FD_Handling::lock(s, scene, true);
+	FD_Handling::lock(s, scene);
 	// Create the group and camera set
-	cameras = std::make_shared<FD_CameraSet>(scene->getWindow());
+	group = factory->generateObjectGroup(true, true, object_list);
+	cameras = factory->generateCameraSet();
 	camera = cameras->addCamera(1920);
-	group = std::make_shared<FD_ObjectGroup>(object_list);
 	group->setCameraSet(cameras);
-	scene->addObjectGroup(group);
 	// Create the button manager
-	button_manager = new FD_ButtonManager(scene, cameras, input_list);
+	button_manager = factory->generateButtonManager(cameras, input_list);
 	button_manager->addDefaultMaps();
-	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
 	// Add background
+	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
 	std::shared_ptr<FD_FileImage> bg_image;
-	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND),
-		bg_image, true);
-	background = std::make_shared<FD_Element>(bg_image,
-		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
-	background->assimilate(group);
+	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND), bg_image, true);
+	background = factory->generateElement(true, bg_image, 0, 0, 0, 0, 
+		1, 1, false, FD_TOP_LEFT);
 	// Create the buttons
 	int increment{ 0 };
 	std::shared_ptr<FD_Font> def_font;
@@ -85,10 +87,11 @@ FD_Testing::FD_TestChoiceState::FD_TestChoiceState(std::weak_ptr<FD_Scene> s)
 		increment++;
 	}
 	// Get the input
-	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
-		input, true);
+	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list), input, true);
+	// Delete the factory
+	delete factory;
 }
-FD_Testing::FD_TestChoiceState::~FD_TestChoiceState() { delete button_manager; }
+FD_Testing::FD_TestChoiceState::~FD_TestChoiceState() {}
 
 void FD_Testing::FD_TestChoiceState::wake() {
 	FD_State::wake();
@@ -145,32 +148,29 @@ void FD_Testing::FD_TestChoiceState::resized(int w, int h) {
 
 FD_Testing::FD_CameraTestState::FD_CameraTestState(std::weak_ptr<FD_Scene> s)
 	: FD_State(FD_TEST_CAMERA_STATE, s) {
+	FD_Factory* factory{ new FD_Factory(s) };
 	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(s, scene, true);
 	// Create the group and camera set
-	cameras = std::make_shared<FD_CameraSet>(scene->getWindow());
+	group = factory->generateObjectGroup(true, true, object_list);
+	cameras = factory->generateCameraSet();
 	cameras->setCameraTransitionDuration(300);
 	cameras->setCameraTransitionType(FD_TWEEN_EASE_OUT);
 	camera_1 = cameras->addCamera(1920);
 	camera_2 = cameras->addCamera(1280);
-	group = std::make_shared<FD_ObjectGroup>(object_list);
 	group->setCameraSet(cameras);
-	scene->addObjectGroup(group);
 	// Create the button manager
-	button_manager = new FD_ButtonManager(scene, cameras, input_list);
+	button_manager = factory->generateButtonManager(cameras, input_list);
 	button_manager->addDefaultMouseMaps();
-	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
 	// Add background
+	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
 	std::shared_ptr<FD_FileImage> bg_image;
-	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND),
-		bg_image, true);
-	background = std::make_shared<FD_Element>(bg_image,
-		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
-	background->assimilate(group);
+	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND), bg_image, true);
+	background = factory->generateElement(true, bg_image, 0, 0, 0, 0, 
+		1, 1, false, FD_TOP_LEFT);
 	// Create the box to show the other camera
 	SDL_Colour colour{ 255, 0, 0, 255 };
-	other_cam = std::make_shared<FD_Box>(0, 0, 0, 0, 3, true, colour);
-	group->addObject(other_cam);
+	other_cam = factory->generateBox(true, 0, 0, 0, 0, 3, true, colour);
 	// Create the buttons
 	int increment{ 0 };
 	std::shared_ptr<FD_Font> def_font;
@@ -206,8 +206,10 @@ FD_Testing::FD_CameraTestState::FD_CameraTestState(std::weak_ptr<FD_Scene> s)
 	input->addKeyMap(FD_MAP_HELD, SDLK_d, CAMERA_RIGHT);
 	input->addMouseWheelMap(FD_SCROLL_UP, CAMERA_IN);
 	input->addMouseWheelMap(FD_SCROLL_DOWN, CAMERA_OUT);
+	// Delete the factory
+	delete factory;
 }
-FD_Testing::FD_CameraTestState::~FD_CameraTestState() { delete button_manager; }
+FD_Testing::FD_CameraTestState::~FD_CameraTestState() {}
 
 void FD_Testing::FD_CameraTestState::wake() {
 	FD_State::wake();
@@ -332,14 +334,14 @@ void FD_Testing::FD_CameraTestState::resized(int w, int h) {
 
 FD_Testing::FD_EventTestState::FD_EventTestState(std::weak_ptr<FD_Scene> s)
 	: FD_State(FD_TEST_EVENT_STATE, s) {
+	FD_Factory* factory{ new FD_Factory(s) };
 	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(s, scene, true);
 	// Create the group and camera set
-	cameras = std::make_shared<FD_CameraSet>(scene->getWindow());
+	group = factory->generateObjectGroup(true, true, object_list);
+	cameras = factory->generateCameraSet();
 	camera = cameras->addCamera(1920);
-	group = std::make_shared<FD_ObjectGroup>(object_list);
 	group->setCameraSet(cameras);
-	scene->addObjectGroup(group);
 	// Create the listener
 	listener = std::make_shared<FD_EventListener>();
 	listener->setAccepting(false);
@@ -350,13 +352,14 @@ FD_Testing::FD_EventTestState::FD_EventTestState(std::weak_ptr<FD_Scene> s)
 	// Add background
 	std::shared_ptr<FD_FileImage> bg_image;
 	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND), bg_image, true);
-	background = std::make_shared<FD_Element>(bg_image,
+	background = factory->generateElement(true, bg_image,
 		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
-	background->assimilate(group);
 	// Get the input
 	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
 		input, true);
 	input->addKeyMap(FD_MAP_RELEASED, SDLK_ESCAPE, BACK);
+	// Delete the factory
+	delete factory;
 }
 FD_Testing::FD_EventTestState::~FD_EventTestState() {  }
 
@@ -435,25 +438,24 @@ std::shared_ptr<FD_EventListener> FD_Testing::FD_EventTestState::getEventListene
 
 FD_Testing::FD_AudioTestState::FD_AudioTestState(std::weak_ptr<FD_Scene> s)
 	: FD_State(FD_TEST_EVENT_STATE, s) {
+	FD_Factory* factory{ new FD_Factory(s) };
 	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(s, scene, true);
 	// Create the group and camera set
-	cameras = std::make_shared<FD_CameraSet>(scene->getWindow());
+	group = factory->generateObjectGroup(true, true, object_list);
+	cameras = factory->generateCameraSet();
 	camera = cameras->addCamera(1920);
-	group = std::make_shared<FD_ObjectGroup>(object_list);
 	group->setCameraSet(cameras);
-	scene->addObjectGroup(group);
 	// Create the button manager
-	button_manager = new FD_ButtonManager(scene, cameras, input_list);
+	button_manager = factory->generateButtonManager(cameras, input_list);
 	button_manager->addDefaultMouseMaps();
 	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
 	// Add background
 	std::shared_ptr<FD_FileImage> bg_image;
 	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND),
 		bg_image, true);
-	background = std::make_shared<FD_Element>(bg_image,
+	background = factory->generateElement(true, bg_image,
 		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
-	background->assimilate(group);
 	// Add music
 	FD_Handling::lock(scene->getAudioManager()->loadMusic(FD_SONG), music, true);
 	FD_Handling::lock(scene->getAudioManager()->loadSoundEffect(FD_BLIP), sfx, true);
@@ -473,8 +475,10 @@ FD_Testing::FD_AudioTestState::FD_AudioTestState(std::weak_ptr<FD_Scene> s)
 	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
 		input, true);
 	input->addKeyMap(FD_MAP_RELEASED, SDLK_ESCAPE, BACK);
+	// Delete the factory
+	delete factory;
 }
-FD_Testing::FD_AudioTestState::~FD_AudioTestState() { delete button_manager; }
+FD_Testing::FD_AudioTestState::~FD_AudioTestState() {}
 
 void FD_Testing::FD_AudioTestState::wake() {
 	FD_State::wake();
@@ -545,49 +549,46 @@ void FD_Testing::FD_AudioTestState::resized(int w, int h) {
 
 FD_Testing::FD_TypingState::FD_TypingState(std::weak_ptr<FD_Scene> s)
 	: FD_State(FD_TEST_EVENT_STATE, s) {
+	FD_Factory* factory{ new FD_Factory(s) };
 	std::shared_ptr<FD_Scene> scene;
 	FD_Handling::lock(s, scene, true);
 	// Create the group and camera set
-	cameras = std::make_shared<FD_CameraSet>(scene->getWindow());
+	group = factory->generateObjectGroup(true, true, object_list);
+	cameras = factory->generateCameraSet();
 	camera = cameras->addCamera(1920);
+	group->setCameraSet(cameras);
 	// Create the button manager
-	bm = new FD_ButtonManager(scene, cameras, input_list);
+	bm = factory->generateButtonManager(cameras, input_list);
 	bm->addDefaultMouseMaps();
 	// Add background
 	std::shared_ptr<FD_ImageManager> im{ scene->getImageManager() };
 	std::shared_ptr<FD_FileImage> bg_image;
 	FD_Handling::lock(im->loadImage(FD_IMAGE_BACKGROUND), bg_image, true);
-	background = std::make_shared<FD_Element>(bg_image,
+	background = factory->generateElement(true, bg_image,
 		0, 0, 0, 0, 1, 1, false, FD_TOP_LEFT);
-	group = std::make_shared<FD_ObjectGroup>(object_list);
-	group->setCameraSet(cameras);
-	scene->addObjectGroup(group);
-	background->assimilate(group);
 	// Add buttons
 	std::shared_ptr<FD_Font> def_font;
 	SDL_Colour font_colour = { 255, 255, 255, 255 };
 	SDL_Colour sel_colour = { 120, 120, 240, 255 };
 	SDL_Colour sel_text_colour = { 0, 0, 0, 255 };
 	FD_ButtonTemplate temp{ s, group, 10, true };
-	//temp.background = im->loadImage(FD_IMAGE_BUTTON);
+	// temp.background = im->loadImage(FD_IMAGE_BUTTON);
 	FD_Handling::lock(im->loadFont(FD_FONT, 64), def_font, true);
 	FD_TextTemplate type_temp{ 
 		def_font, font_colour, sel_colour, sel_text_colour,
 		600, 300, false
 	};
-	//
+	// Create the vertical scrolling text field
 	std::shared_ptr<FD_TextField> tf{
-		std::make_shared<FD_TextField>(
-			temp, type_temp, input_list, 0, 0, 0, 25, 40, 25, 40)
+		factory->generateTextField(false, temp, type_temp, input_list, 0, 0, 0, 25, 40, 25, 40)
 	};
 	bm->addButton(group, tf);
 	fields.push_back(tf);
-	//
+	// Create the horizontal scrolling text field
 	type_temp.box_height = 100;
 	type_temp.horz_scroll = true;
 	std::shared_ptr<FD_TextField> htf{
-		std::make_shared<FD_TextField>(
-			temp, type_temp, input_list, 0, -400, 1, 25, 40, 25, 40)
+		factory->generateTextField(false, temp, type_temp, input_list, 0, -400, 1, 25, 40, 25, 40)
 	};
 	bm->addButton(group, htf);
 	fields.push_back(htf);
@@ -595,10 +596,10 @@ FD_Testing::FD_TypingState::FD_TypingState(std::weak_ptr<FD_Scene> s)
 	FD_Handling::lock(scene->getInputManager()->getInputSet(input_list),
 		input, true);
 	input->addKeyMap(FD_MAP_RELEASED, SDLK_ESCAPE, BACK);
+	// Delete the factory
+	delete factory;
 }
-FD_Testing::FD_TypingState::~FD_TypingState() { 
-	delete bm;
-}
+FD_Testing::FD_TypingState::~FD_TypingState() {}
 
 void FD_Testing::FD_TypingState::wake() {
 	FD_State::wake();
